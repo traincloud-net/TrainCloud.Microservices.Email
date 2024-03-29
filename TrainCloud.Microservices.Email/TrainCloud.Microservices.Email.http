@@ -1,0 +1,6 @@
+@TrainCloud.Microservices.Email_HostAddress = http://localhost:5043
+
+GET {{TrainCloud.Microservices.Email_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
