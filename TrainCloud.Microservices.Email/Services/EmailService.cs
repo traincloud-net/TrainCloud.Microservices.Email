@@ -2,6 +2,7 @@
 using System.Net;
 using TrainCloud.Microservices.Core.Services;
 using TrainCloud.Microservices.Email.Models;
+using Microsoft.IdentityModel.Tokens;
 
 namespace TrainCloud.Microservices.Email.Services;
 
@@ -20,7 +21,7 @@ public class EmailService : AbstractService<EmailService>, IEmailService
         {
             mail.From = new MailAddress("mail@traincloud.net", "TrainCloud");
 
-            if (postModel.To != null)
+            if (!postModel.To.IsNullOrEmpty())
             {
                 foreach (string addr in (postModel.To))
                 {
@@ -28,7 +29,7 @@ public class EmailService : AbstractService<EmailService>, IEmailService
                 }
             }
 
-            if (postModel.CC != null)
+            if (!postModel.CC.IsNullOrEmpty())
             {
                 foreach (string addr in (postModel.CC))
                 {
@@ -37,7 +38,7 @@ public class EmailService : AbstractService<EmailService>, IEmailService
 
             }
 
-            if (postModel.BCC != null)
+            if (!postModel.BCC.IsNullOrEmpty())
             {
                 foreach (string addr in (postModel.BCC))
                 {
@@ -46,22 +47,22 @@ public class EmailService : AbstractService<EmailService>, IEmailService
 
             }
 
-
-            //postModel.To.forEach(a => address.Add(new MailAddress(postModel.To)));
-            //if (postModel.CC != null) mail.CC.Add(new MailAddress(postModel.CC));
-            //if (postModel.BCC != null) mail.Bcc.Add(new MailAddress(postModel.BCC));
             mail.IsBodyHtml = postModel.IsHTML;
             mail.Subject = postModel.Title;
             mail.Body = postModel.Body;
 
-            foreach (var AttachmentFilePath in postModel.AttachmentFilePaths)
+            if (!postModel.AttachmentFilePaths.IsNullOrEmpty())
             {
-                if (File.Exists(AttachmentFilePath))
+                foreach (var AttachmentFilePath in postModel.AttachmentFilePaths)
                 {
-                    Attachment a = new Attachment(AttachmentFilePath);
-                    mail.Attachments.Add(a);
+                    if (File.Exists(AttachmentFilePath))
+                    {
+                        Attachment a = new Attachment(AttachmentFilePath);
+                        mail.Attachments.Add(a);
+                    }
                 }
             }
+
 
             using (SmtpClient client = new SmtpClient("smtp.ionos.de", 587))
             {
@@ -74,3 +75,15 @@ public class EmailService : AbstractService<EmailService>, IEmailService
 
     }
 }
+
+//{
+//  "to": [
+//    ""
+//  ],
+//  "title": "Mailer",
+//  "body": "Mail \n with tab",
+//  "attachmentFilePaths": [
+//    "C:/Users/test/Desktop/test.docx"
+//  ],
+//  "isHTML": true
+//}
