@@ -16,7 +16,7 @@ public class SendEmailModel
     [Required]
     public string Body { get; set; } = string.Empty;
 
-    public object? Attachments { get; set; }
+    public IEnumerable<string>? AttachmentFilePaths { get; set; }
 
     public bool IsHTML { get; set; }
 }
