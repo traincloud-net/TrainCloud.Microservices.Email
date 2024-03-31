@@ -4,11 +4,11 @@ namespace TrainCloud.Microservices.Email.Models;
 
 public class SendEmailModel
 {
-    public string? To { get; set; }
+    public string[]? To { get; set; }
 
-    public string? CC { get; set; }
+    public string[]? CC { get; set; }
 
-    public string? BCC { get; set; }
+    public string[]? BCC { get; set; }
 
     [Required]
     public string Title { get; set; } = string.Empty;
@@ -16,7 +16,7 @@ public class SendEmailModel
     [Required]
     public string Body { get; set; } = string.Empty;
 
-    public IEnumerable<string>? AttachmentFilePaths { get; set; }
+    public string[]? AttachmentFilePaths { get; set; }
 
     public bool IsHTML { get; set; }
 }

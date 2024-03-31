@@ -19,9 +19,37 @@ public class EmailService : AbstractService<EmailService>, IEmailService
         using (MailMessage mail = new MailMessage())
         {
             mail.From = new MailAddress("mail@traincloud.net", "TrainCloud");
-            mail.To.Add(new MailAddress(postModel.To));
-            if (postModel.CC != null) mail.CC.Add(new MailAddress(postModel.CC));
-            if (postModel.BCC != null) mail.Bcc.Add(new MailAddress(postModel.BCC));
+
+            if (postModel.To != null)
+            {
+                foreach (string addr in (postModel.To))
+                {
+                    mail.To.Add(new MailAddress(addr));
+                }
+            }
+
+            if (postModel.CC != null)
+            {
+                foreach (string addr in (postModel.CC))
+                {
+                    mail.CC.Add(new MailAddress(addr));
+                }
+
+            }
+
+            if (postModel.BCC != null)
+            {
+                foreach (string addr in (postModel.BCC))
+                {
+                    mail.Bcc.Add(new MailAddress(addr));
+                }
+
+            }
+
+
+            //postModel.To.forEach(a => address.Add(new MailAddress(postModel.To)));
+            //if (postModel.CC != null) mail.CC.Add(new MailAddress(postModel.CC));
+            //if (postModel.BCC != null) mail.Bcc.Add(new MailAddress(postModel.BCC));
             mail.IsBodyHtml = postModel.IsHTML;
             mail.Subject = postModel.Title;
             mail.Body = postModel.Body;
@@ -43,6 +71,6 @@ public class EmailService : AbstractService<EmailService>, IEmailService
             };
         };
 
-        
+
     }
 }
