@@ -1,13 +1,19 @@
-var builder = WebApplication.CreateBuilder(args);
+using Microsoft.AspNetCore.Builder;
+using TrainCloud.Microservices.Email.Services;
+
+var webApplicationBuilder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+webApplicationBuilder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+webApplicationBuilder.Services.AddEndpointsApiExplorer();
+webApplicationBuilder.Services.AddSwaggerGen();
 
-var app = builder.Build();
+webApplicationBuilder.Services.AddHttpContextAccessor();
+webApplicationBuilder.Services.AddScoped<IEmailService, EmailService>();
+
+var app = webApplicationBuilder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

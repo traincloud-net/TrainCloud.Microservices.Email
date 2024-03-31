@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34707.107
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrainCloud.Microservices.Email", "TrainCloud.Microservices.Email\TrainCloud.Microservices.Email.csproj", "{7AD4EBDB-388A-43ED-9F70-EB22909A08CC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrainCloud.Microservices.Email", "TrainCloud.Microservices.Email\TrainCloud.Microservices.Email.csproj", "{7AD4EBDB-388A-43ED-9F70-EB22909A08CC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AF932779-4F2C-4A8C-80E6-F1CA491FD7CE}"
 	ProjectSection(SolutionItems) = preProject
@@ -15,6 +15,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrainCloud.Tests.Microservices.Email", "TrainCloud.Tests.Microservices.Email\TrainCloud.Tests.Microservices.Email.csproj", "{2F77C87E-29B9-4DAE-AB0D-110ACBFDE6FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrainCloud.Microservices.Email.Models", "TrainCloud.Microservices.Email.Models\TrainCloud.Microservices.Email.Models.csproj", "{E429230E-63E5-4A08-84D1-5C002F973574}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +29,14 @@ Global
 		{7AD4EBDB-388A-43ED-9F70-EB22909A08CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7AD4EBDB-388A-43ED-9F70-EB22909A08CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7AD4EBDB-388A-43ED-9F70-EB22909A08CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F77C87E-29B9-4DAE-AB0D-110ACBFDE6FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F77C87E-29B9-4DAE-AB0D-110ACBFDE6FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F77C87E-29B9-4DAE-AB0D-110ACBFDE6FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F77C87E-29B9-4DAE-AB0D-110ACBFDE6FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E429230E-63E5-4A08-84D1-5C002F973574}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E429230E-63E5-4A08-84D1-5C002F973574}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E429230E-63E5-4A08-84D1-5C002F973574}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E429230E-63E5-4A08-84D1-5C002F973574}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
