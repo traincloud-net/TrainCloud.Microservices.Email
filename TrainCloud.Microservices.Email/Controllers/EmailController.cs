@@ -29,7 +29,7 @@ public class EmailController : AbstractController<EmailController>
     [SwaggerResponse(StatusCodes.Status200OK)]
     [SwaggerResponse(StatusCodes.Status400BadRequest)]
     [SwaggerResponse(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> PostAsync([FromBody] SendEmailModel postModel)
+    public async Task<IActionResult> PostAsync([FromBody] PostSendEmailModel postModel)
     {
         try
         {

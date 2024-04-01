@@ -4,6 +4,6 @@ namespace TrainCloud.Microservices.Email.Services;
 
 public interface IEmailService
 {
-    void SendEmail(SendEmailModel postModel);
+    void SendEmail(PostSendEmailModel postModel);
 }
 

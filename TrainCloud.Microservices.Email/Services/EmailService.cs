@@ -15,34 +15,26 @@ public class EmailService : AbstractService<EmailService>, IEmailService
 
     }
 
-    public void SendEmail(SendEmailModel postModel)
+    public void SendEmail(PostSendEmailModel postModel)
     {
         using MailMessage mail = new MailMessage();
 
         mail.From = new MailAddress("mail@traincloud.net", "TrainCloud");
-
 
         foreach (string addr in (postModel.To))
         {
             mail.To.Add(new MailAddress(addr));
         }
 
-
-
         foreach (string addr in (postModel.CC))
         {
             mail.CC.Add(new MailAddress(addr));
         }
 
-
-
-
         foreach (string addr in (postModel.BCC))
         {
             mail.Bcc.Add(new MailAddress(addr));
         }
-
-
 
         mail.IsBodyHtml = postModel.IsHTML;
         mail.Subject = postModel.Title;
@@ -52,12 +44,9 @@ public class EmailService : AbstractService<EmailService>, IEmailService
         {
             foreach (KeyValuePair<string, byte[]> attachment in postModel.Attachments)
             {
-
-
                 var stream = new MemoryStream(attachment.Value);
                 var a = new Attachment(stream, attachment.Key, null);
                 mail.Attachments.Add(a);
-
             }
         }
 
@@ -68,8 +57,6 @@ public class EmailService : AbstractService<EmailService>, IEmailService
 
             client.Send(mail);
         };
-
-
     }
 }
 

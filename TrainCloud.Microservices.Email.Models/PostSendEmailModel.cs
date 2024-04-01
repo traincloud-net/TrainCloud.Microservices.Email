@@ -2,7 +2,7 @@
 
 namespace TrainCloud.Microservices.Email.Models;
 
-public class SendEmailModel : IValidatableObject
+public class PostSendEmailModel : IValidatableObject
 {
     public List<string> To { get; set; } = new();
 

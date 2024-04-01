@@ -29,3 +29,9 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+/// <summary>
+/// The class definition is required to make this service testable
+/// TrainCloud.Tests.Microservices.Email requires a visible Program class for the WebApplicationFactory
+/// </summary>
+public partial class Program { }
