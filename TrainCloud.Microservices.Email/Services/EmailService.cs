@@ -17,59 +17,56 @@ public class EmailService : AbstractService<EmailService>, IEmailService
 
     public void SendEmail(SendEmailModel postModel)
     {
-        using (MailMessage mail = new MailMessage())
+        using MailMessage mail = new MailMessage();
+
+        mail.From = new MailAddress("mail@traincloud.net", "TrainCloud");
+
+
+        foreach (string addr in (postModel.To))
         {
-            mail.From = new MailAddress("mail@traincloud.net", "TrainCloud");
+            mail.To.Add(new MailAddress(addr));
+        }
 
-            if (!postModel.To.IsNullOrEmpty())
+
+
+        foreach (string addr in (postModel.CC))
+        {
+            mail.CC.Add(new MailAddress(addr));
+        }
+
+
+
+
+        foreach (string addr in (postModel.BCC))
+        {
+            mail.Bcc.Add(new MailAddress(addr));
+        }
+
+
+
+        mail.IsBodyHtml = postModel.IsHTML;
+        mail.Subject = postModel.Title;
+        mail.Body = postModel.Body;
+
+        if (postModel.Attachments.Count > 0)
+        {
+            foreach (KeyValuePair<string, byte[]> attachment in postModel.Attachments)
             {
-                foreach (string addr in (postModel.To))
-                {
-                    mail.To.Add(new MailAddress(addr));
-                }
+
+
+                var stream = new MemoryStream(attachment.Value);
+                var a = new Attachment(stream, attachment.Key, null);
+                mail.Attachments.Add(a);
+
             }
+        }
 
-            if (!postModel.CC.IsNullOrEmpty())
-            {
-                foreach (string addr in (postModel.CC))
-                {
-                    mail.CC.Add(new MailAddress(addr));
-                }
+        using (SmtpClient client = new SmtpClient("smtp.ionos.de", 587))
+        {
+            client.Credentials = new NetworkCredential("mail@traincloud.net", "9N!@&^T5F5V5agw");
+            client.EnableSsl = true;
 
-            }
-
-            if (!postModel.BCC.IsNullOrEmpty())
-            {
-                foreach (string addr in (postModel.BCC))
-                {
-                    mail.Bcc.Add(new MailAddress(addr));
-                }
-
-            }
-
-            mail.IsBodyHtml = postModel.IsHTML;
-            mail.Subject = postModel.Title;
-            mail.Body = postModel.Body;
-
-            if (!postModel.AttachmentFilePaths.IsNullOrEmpty())
-            {
-                foreach (var AttachmentFilePath in postModel.AttachmentFilePaths)
-                {
-                    if (File.Exists(AttachmentFilePath))
-                    {
-                        Attachment a = new Attachment(AttachmentFilePath);
-                        mail.Attachments.Add(a);
-                    }
-                }
-            }
-
-
-            using (SmtpClient client = new SmtpClient("smtp.ionos.de", 587))
-            {
-                client.Credentials = new NetworkCredential("mail@traincloud.net", "9N!@&^T5F5V5agw");
-                client.EnableSsl = true;
-                client.Send(mail);
-            };
+            client.Send(mail);
         };
 
 

@@ -2,13 +2,13 @@
 
 namespace TrainCloud.Microservices.Email.Models;
 
-public class SendEmailModel
+public class SendEmailModel : IValidatableObject
 {
-    public string[]? To { get; set; }
+    public List<string> To { get; set; } = new();
 
-    public string[]? CC { get; set; }
+    public List<string> CC { get; set; } = new();
 
-    public string[]? BCC { get; set; }
+    public List<string> BCC { get; set; } = new();
 
     [Required]
     public string Title { get; set; } = string.Empty;
@@ -16,7 +16,13 @@ public class SendEmailModel
     [Required]
     public string Body { get; set; } = string.Empty;
 
-    public string[]? AttachmentFilePaths { get; set; }
+    public Dictionary<string, byte[]> Attachments { get; set; } = new();
 
     public bool IsHTML { get; set; }
+
+    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+    {
+        // throw new NotImplementedException();
+        yield return ValidationResult.Success;
+    }
 }
