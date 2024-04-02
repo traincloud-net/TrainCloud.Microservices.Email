@@ -1,0 +1,43 @@
+name: Build and Deploy to Cloud Run
+
+on:
+  workflow_dispatch:
+
+# env:
+#   SERVICE_NAME: 'traincloud-microservices-email'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        
+      - name: Google Auth
+        id: auth
+        uses: 'google-github-actions/auth@v1'
+        with:          
+          token_format: access_token
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+      - name: Docker Auth
+        uses: 'docker/login-action@v3'
+        with:
+          username: 'oauth2accesstoken'
+          password: '${{ steps.auth.outputs.access_token }}'
+          registry: 'europe-docker.pkg.dev'
+
+      - name: Build Container
+        run: docker build -t "europe-docker.pkg.dev/traincloud/traincloud-microservices/traincloud-microservices-email:${{ github.sha }}" .
+
+      - name: Push Container
+        run: docker push "europe-docker.pkg.dev/traincloud/traincloud-microservices/traincloud-microservices-email:${{ github.sha }}"
+
+      - name: Deploy to Cloud Run 
+        id: deploy
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: traincloud-microservices-email
+          region: europe-west3
+          image: "europe-docker.pkg.dev/traincloud/traincloud-microservices/traincloud-microservices-email:${{ github.sha }}"
