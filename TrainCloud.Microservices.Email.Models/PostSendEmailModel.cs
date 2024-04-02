@@ -22,6 +22,10 @@ public class PostSendEmailModel : IValidatableObject
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
+        if (this.To.Count < 2)
+        {
+            throw new Exception("At least two Email-Addresses are needed in To field");
+        }
         // throw new NotImplementedException();
         yield return ValidationResult.Success;
     }

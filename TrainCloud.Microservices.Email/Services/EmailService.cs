@@ -21,19 +21,19 @@ public class EmailService : AbstractService<EmailService>, IEmailService
 
         mail.From = new MailAddress("mail@traincloud.net", "TrainCloud");
 
-        foreach (string addr in (postModel.To))
+        foreach (string toAddress in (postModel.To))
         {
-            mail.To.Add(new MailAddress(addr));
+            mail.To.Add(new MailAddress(toAddress));
         }
 
-        foreach (string addr in (postModel.CC))
+        foreach (string ccAdress in (postModel.CC))
         {
-            mail.CC.Add(new MailAddress(addr));
+            mail.CC.Add(new MailAddress(ccAdress));
         }
 
-        foreach (string addr in (postModel.BCC))
+        foreach (string bccAddress in (postModel.BCC))
         {
-            mail.Bcc.Add(new MailAddress(addr));
+            mail.Bcc.Add(new MailAddress(bccAddress));
         }
 
         mail.IsBodyHtml = postModel.IsHTML;
@@ -50,13 +50,12 @@ public class EmailService : AbstractService<EmailService>, IEmailService
             }
         }
 
-        using (SmtpClient client = new SmtpClient("smtp.ionos.de", 587))
-        {
-            client.Credentials = new NetworkCredential("mail@traincloud.net", "9N!@&^T5F5V5agw");
-            client.EnableSsl = true;
+        using SmtpClient client = new SmtpClient("smtp.ionos.de", 587);
 
-            client.Send(mail);
-        };
+        client.Credentials = new NetworkCredential("mail@traincloud.net", "9N!@&^T5F5V5agw");
+        client.EnableSsl = true;
+
+        client.Send(mail);
     }
 }
 
