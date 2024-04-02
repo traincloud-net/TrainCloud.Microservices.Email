@@ -6,8 +6,17 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+	<ItemGroup>
+		<InternalsVisibleTo Include="TrainCloud.Tests.Microservices.Email" />
+	</ItemGroup>
+
   <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+    <PackageReference Include="TrainCloud.Microservices.Core" Version="0.0.29" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\TrainCloud.Microservices.Email.Models\TrainCloud.Microservices.Email.Models.csproj" />
   </ItemGroup>
 
 </Project>
