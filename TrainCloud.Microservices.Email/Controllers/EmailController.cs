@@ -24,11 +24,12 @@ public class EmailController : AbstractController<EmailController>
     }
 
     [HttpPost("Send")]
-    //[Authorize]
+    [Authorize]
     [Consumes("application/json")]
     [SwaggerResponse(StatusCodes.Status200OK)]
+    [SwaggerResponse(StatusCodes.Status400BadRequest)]
     [SwaggerResponse(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> PostAsync([FromBody] SendEmailModel postModel)
+    public async Task<IActionResult> PostAsync([FromBody] PostSendEmailModel postModel)
     {
         try
         {
