@@ -1,4 +1,7 @@
 using Microsoft.AspNetCore.Builder;
+using TrainCloud.Microservices.Core.Extensions.Authentication;
+using TrainCloud.Microservices.Core.Extensions.Authorization;
+using TrainCloud.Microservices.Core.Extensions.Swagger;
 using TrainCloud.Microservices.Email.Services;
 
 var webApplicationBuilder = WebApplication.CreateBuilder(args);
@@ -13,22 +16,29 @@ webApplicationBuilder.Services.AddSwaggerGen();
 webApplicationBuilder.Services.AddHttpContextAccessor();
 webApplicationBuilder.Services.AddScoped<IEmailService, EmailService>();
 
-var app = webApplicationBuilder.Build();
+webApplicationBuilder.Services.AddTrainCloudAuthorization();
+AuthenticationOptions authenticationOptions = webApplicationBuilder.Configuration.GetSection(AuthenticationOptions.Position).Get<AuthenticationOptions>()!;
+webApplicationBuilder.Services.AddTrainCloudAuthentication(authenticationOptions);
+
+SwaggerOptions swaggerOptions = webApplicationBuilder.Configuration.GetSection(SwaggerOptions.Position).Get<SwaggerOptions>()!;
+webApplicationBuilder.Services.AddTrainCloudSwagger(swaggerOptions);
+
+WebApplication webApplication = webApplicationBuilder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (webApplication.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    webApplication.UseSwagger();
+    webApplication.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+webApplication.UseHttpsRedirection();
 
-app.UseAuthorization();
+webApplication.UseAuthorization();
 
-app.MapControllers();
+webApplication.MapControllers();
 
-app.Run();
+webApplication.Run();
 
 /// <summary>
 /// The class definition is required to make this service testable

@@ -24,7 +24,7 @@ public class EmailController : AbstractController<EmailController>
     }
 
     [HttpPost("Send")]
-    //[Authorize]
+    [Authorize]
     [Consumes("application/json")]
     [SwaggerResponse(StatusCodes.Status200OK)]
     [SwaggerResponse(StatusCodes.Status400BadRequest)]
