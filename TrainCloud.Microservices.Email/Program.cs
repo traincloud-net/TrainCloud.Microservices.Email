@@ -25,12 +25,7 @@ webApplicationBuilder.Services.AddTrainCloudSwagger(swaggerOptions);
 
 WebApplication webApplication = webApplicationBuilder.Build();
 
-// Configure the HTTP request pipeline.
-if (webApplication.Environment.IsDevelopment())
-{
-    webApplication.UseSwagger();
-    webApplication.UseSwaggerUI();
-}
+webApplication.UseTrainCloudSwagger();
 
 webApplication.UseHttpsRedirection();
 
