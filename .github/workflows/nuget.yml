@@ -35,5 +35,5 @@ jobs:
       - name: Push - Models
         run: dotnet nuget push TrainCloud.Microservices.Email.Models.${VERSION}.nupkg --source https://nuget.pkg.github.com/traincloud-net/index.json --api-key ${{ secrets.TRAINCLOUD_NUGET_PUSH_TOKEN }}
 
-      # - name: Push - Messages
-      #   run: dotnet nuget push TrainCloud.Microservices.Email.Messages.${VERSION}.nupkg --source https://nuget.pkg.github.com/traincloud-net/index.json --api-key ${{ secrets.TRAINCLOUD_NUGET_PUSH_TOKEN }}
+      - name: Push - Messages
+        run: dotnet nuget push TrainCloud.Microservices.Email.Messages.${VERSION}.nupkg --source https://nuget.pkg.github.com/traincloud-net/index.json --api-key ${{ secrets.TRAINCLOUD_NUGET_PUSH_TOKEN }}
