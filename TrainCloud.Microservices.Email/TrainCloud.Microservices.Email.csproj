@@ -12,11 +12,11 @@
 
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-    <PackageReference Include="TrainCloud.Microservices.Core" Version="0.0.38" />
+    <PackageReference Include="TrainCloud.Microservices.Core" Version="0.0.41" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TrainCloud.Microservices.Email.Models\TrainCloud.Microservices.Email.Models.csproj" />
+    <ProjectReference Include="..\TrainCloud.Microservices.Email.Messages\TrainCloud.Microservices.Email.Messages.csproj" />
   </ItemGroup>
 
 </Project>

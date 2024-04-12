@@ -1,27 +1,24 @@
-using Microsoft.AspNetCore.Builder;
 using TrainCloud.Microservices.Core.Extensions.Authentication;
 using TrainCloud.Microservices.Core.Extensions.Authorization;
 using TrainCloud.Microservices.Core.Extensions.Swagger;
-using TrainCloud.Microservices.Email.Services;
+using TrainCloud.Microservices.Email.Services.Email;
+using TrainCloud.Microservices.Email.Services.MessageBus;
 
 var webApplicationBuilder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-webApplicationBuilder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-webApplicationBuilder.Services.AddEndpointsApiExplorer();
-webApplicationBuilder.Services.AddSwaggerGen();
-
 webApplicationBuilder.Services.AddHttpContextAccessor();
-webApplicationBuilder.Services.AddScoped<IEmailService, EmailService>();
-
-webApplicationBuilder.Services.AddTrainCloudAuthorization();
-AuthenticationOptions authenticationOptions = webApplicationBuilder.Configuration.GetSection(AuthenticationOptions.Position).Get<AuthenticationOptions>()!;
-webApplicationBuilder.Services.AddTrainCloudAuthentication(authenticationOptions);
 
 SwaggerOptions swaggerOptions = webApplicationBuilder.Configuration.GetSection(SwaggerOptions.Position).Get<SwaggerOptions>()!;
 webApplicationBuilder.Services.AddTrainCloudSwagger(swaggerOptions);
+
+webApplicationBuilder.Services.AddHostedService<NewScanMessageBusSubscriberService>(service =>
+    new NewScanMessageBusSubscriberService(service.GetRequiredService<IConfiguration>(),
+                                           service.GetRequiredService<ILogger<NewScanMessageBusSubscriberService>>(),
+                                           service.GetRequiredService<IServiceScopeFactory>(),
+                                           webApplicationBuilder.Configuration.GetValue<string>("MessageBus:Subscriptions:Email")!,
+                                           service.GetRequiredService<IEmailService>()));
+
+webApplicationBuilder.Services.AddScoped<IEmailService, EmailService>();
 
 WebApplication webApplication = webApplicationBuilder.Build();
 
@@ -30,8 +27,6 @@ webApplication.UseTrainCloudSwagger();
 webApplication.UseHttpsRedirection();
 
 webApplication.UseAuthorization();
-
-webApplication.MapControllers();
 
 webApplication.Run();
 
