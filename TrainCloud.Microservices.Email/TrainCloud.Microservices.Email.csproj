@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TrainCloud.Microservices.Email.Messages\TrainCloud.Microservices.Email.Messages.csproj" />
+    <ProjectReference Include="..\TrainCloud.Microservices.Email.Models\TrainCloud.Microservices.Email.Models.csproj" />
   </ItemGroup>
 
 		<ItemGroup>
