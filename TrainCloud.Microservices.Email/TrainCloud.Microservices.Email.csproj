@@ -6,10 +6,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
-	<ItemGroup>
-		<InternalsVisibleTo Include="TrainCloud.Tests.Microservices.Email" />
-	</ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="TrainCloud.Microservices.Core" Version="0.0.41" />
@@ -18,5 +14,11 @@
   <ItemGroup>
     <ProjectReference Include="..\TrainCloud.Microservices.Email.Messages\TrainCloud.Microservices.Email.Messages.csproj" />
   </ItemGroup>
+
+		<ItemGroup>
+				<Content Update="google.cloud.json">
+						<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+				</Content>
+		</ItemGroup>
 
 </Project>

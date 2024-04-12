@@ -1,15 +1,15 @@
-using TrainCloud.Microservices.Core.Extensions.Authentication;
-using TrainCloud.Microservices.Core.Extensions.Authorization;
-using TrainCloud.Microservices.Core.Extensions.Swagger;
 using TrainCloud.Microservices.Email.Services.Email;
 using TrainCloud.Microservices.Email.Services.MessageBus;
 
 var webApplicationBuilder = WebApplication.CreateBuilder(args);
 
-webApplicationBuilder.Services.AddHttpContextAccessor();
+if (!webApplicationBuilder.Environment.IsProduction())
+{
+    // Login as microservice-email-dev@traincloud.iam.gserviceaccount.com
+    Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "google.cloud.json");
+}
 
-SwaggerOptions swaggerOptions = webApplicationBuilder.Configuration.GetSection(SwaggerOptions.Position).Get<SwaggerOptions>()!;
-webApplicationBuilder.Services.AddTrainCloudSwagger(swaggerOptions);
+webApplicationBuilder.Services.AddTransient<IEmailService, EmailService>();
 
 webApplicationBuilder.Services.AddHostedService<NewScanMessageBusSubscriberService>(service =>
     new NewScanMessageBusSubscriberService(service.GetRequiredService<IConfiguration>(),
@@ -18,15 +18,9 @@ webApplicationBuilder.Services.AddHostedService<NewScanMessageBusSubscriberServi
                                            webApplicationBuilder.Configuration.GetValue<string>("MessageBus:Subscriptions:Email")!,
                                            service.GetRequiredService<IEmailService>()));
 
-webApplicationBuilder.Services.AddScoped<IEmailService, EmailService>();
-
 WebApplication webApplication = webApplicationBuilder.Build();
 
-webApplication.UseTrainCloudSwagger();
-
 webApplication.UseHttpsRedirection();
-
-webApplication.UseAuthorization();
 
 webApplication.Run();
 
