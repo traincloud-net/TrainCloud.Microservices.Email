@@ -16,10 +16,11 @@ webApplicationBuilder.Services.AddTrainCloudAuthorization();
 AuthenticationOptions authenticationOptions = webApplicationBuilder.Configuration.GetSection(AuthenticationOptions.Position).Get<AuthenticationOptions>()!;
 webApplicationBuilder.Services.AddTrainCloudAuthentication(authenticationOptions);
 
+webApplicationBuilder.Services.AddHttpContextAccessor();
+webApplicationBuilder.Services.AddControllers();
+
 SwaggerOptions swaggerOptions = webApplicationBuilder.Configuration.GetSection(SwaggerOptions.Position).Get<SwaggerOptions>()!;
 webApplicationBuilder.Services.AddTrainCloudSwagger(swaggerOptions);
-
-webApplicationBuilder.Services.AddControllers();
 
 webApplicationBuilder.Services.AddTransient<IEmailService, EmailService>();
 
