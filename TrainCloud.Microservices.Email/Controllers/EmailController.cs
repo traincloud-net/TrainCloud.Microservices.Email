@@ -9,15 +9,15 @@ namespace TrainCloud.Microservices.Email.Controllers;
 
 [ApiController]
 [Route("/Email/")]
-public class EmailController : AbstractController<EmailController>
+public sealed class EmailController : AbstractController<EmailController>
 {
     private IEmailService EmailService { get; init; }
 
     public EmailController(IWebHostEnvironment webHostEnvironment,
-                                 IHttpContextAccessor httpContextAccessor,
-                                 IConfiguration configuration,
-                                 ILogger<EmailController> logger,
-                                 IEmailService emailService)
+                           IHttpContextAccessor httpContextAccessor,
+                           IConfiguration configuration,
+                           ILogger<EmailController> logger,
+                           IEmailService emailService)
         : base(webHostEnvironment, httpContextAccessor, configuration, logger)
     {
         EmailService = emailService;
@@ -28,12 +28,13 @@ public class EmailController : AbstractController<EmailController>
     [Consumes("application/json")]
     [SwaggerResponse(StatusCodes.Status200OK)]
     [SwaggerResponse(StatusCodes.Status400BadRequest)]
+    [SwaggerResponse(StatusCodes.Status401Unauthorized)]
     [SwaggerResponse(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> PostAsync([FromBody] PostSendEmailModel postModel)
     {
         try
         {
-            await EmailService.SendEmailAsync(postModel.To, postModel.Cc, postModel.Bcc, postModel.Subject, postModel.Body, postModel.IsHtml, postModel.Attachments);
+            await EmailService.SendEmailAsync(new List<string>() { "nico@caratiola.net", "mail@sebastian-hoyer.online" }, null, null, postModel.Subject, postModel.Body, false, null);
             return Ok();
         }
         catch (Exception ex)

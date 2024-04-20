@@ -4,7 +4,7 @@ using TrainCloud.Microservices.Core.Services;
 
 namespace TrainCloud.Microservices.Email.Services.Email;
 
-public class EmailService : AbstractService<EmailService>, IEmailService
+public sealed class EmailService : AbstractService<EmailService>, IEmailService
 {
     public EmailService(IConfiguration configuration,
                         ILogger<EmailService> logger)
