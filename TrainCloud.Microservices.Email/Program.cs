@@ -22,7 +22,7 @@ webApplicationBuilder.Services.AddControllers();
 SwaggerOptions swaggerOptions = webApplicationBuilder.Configuration.GetSection(SwaggerOptions.Position).Get<SwaggerOptions>()!;
 webApplicationBuilder.Services.AddTrainCloudSwagger(swaggerOptions);
 
-webApplicationBuilder.Services.AddTransient<IEmailService, EmailService>();
+webApplicationBuilder.Services.AddEmailService();
 
 webApplicationBuilder.Services.AddHostedService<NewScanMessageBusSubscriberService>(service =>
     new NewScanMessageBusSubscriberService(service.GetRequiredService<IConfiguration>(),

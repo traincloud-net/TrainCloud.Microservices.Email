@@ -20,8 +20,7 @@ public sealed class NewScanMessageBusSubscriberService : AbstractMessageBusSubsc
 
     public override async Task OnMessageAsync(SendMailMessage message) 
     {
-        Logger.LogWarning("OnMessageAsync");
-        using var scope = ServiceScopeFactory.CreateScope();
+        //using var scope = ServiceScopeFactory.CreateScope();
 
         await EmailService.SendEmailAsync(message.To, message.Cc, message.Cc, message.Subject, message.Body, message.IsHtml, message.Attachments);
     }

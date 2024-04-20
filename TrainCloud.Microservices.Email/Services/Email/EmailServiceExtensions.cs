@@ -1,5 +1,12 @@
-﻿namespace TrainCloud.Microservices.Email.Services.Email;
+﻿using System.Runtime.CompilerServices;
 
-public class EmailServiceExtensions
+namespace TrainCloud.Microservices.Email.Services.Email;
+
+public static class EmailServiceExtensions
 {
+    public static IServiceCollection AddEmailService( this IServiceCollection services)
+    {
+        services.AddTransient<IEmailService, EmailService>();
+        return services;
+    }
 }
