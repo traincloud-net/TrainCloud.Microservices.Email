@@ -24,12 +24,12 @@ webApplicationBuilder.Services.AddTrainCloudSwagger(swaggerOptions);
 
 webApplicationBuilder.Services.AddEmailService();
 
-webApplicationBuilder.Services.AddHostedService<NewScanMessageBusSubscriberService>(service =>
-    new NewScanMessageBusSubscriberService(service.GetRequiredService<IConfiguration>(),
-                                           service.GetRequiredService<ILogger<NewScanMessageBusSubscriberService>>(),
-                                           service.GetRequiredService<IServiceScopeFactory>(),
-                                           webApplicationBuilder.Configuration.GetValue<string>("MessageBus:Subscriptions:Email")!,
-                                           service.GetRequiredService<IEmailService>()));
+webApplicationBuilder.Services.AddHostedService<NewEmailMessageBusSubscriberService>(service =>
+    new NewEmailMessageBusSubscriberService(service.GetRequiredService<IConfiguration>(),
+                                            service.GetRequiredService<ILogger<NewEmailMessageBusSubscriberService>>(),
+                                            service.GetRequiredService<IServiceScopeFactory>(),
+                                            webApplicationBuilder.Configuration.GetValue<string>("MessageBus:Subscriptions:Email")!,
+                                            service.GetRequiredService<IEmailService>()));
 
 WebApplication webApplication = webApplicationBuilder.Build();
 

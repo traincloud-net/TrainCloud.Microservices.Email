@@ -6,7 +6,7 @@ public static class EmailServiceExtensions
 {
     public static IServiceCollection AddEmailService( this IServiceCollection services)
     {
-        services.AddTransient<IEmailService, EmailService>();
+        services.AddSingleton<IEmailService, EmailService>();
         return services;
     }
 }
