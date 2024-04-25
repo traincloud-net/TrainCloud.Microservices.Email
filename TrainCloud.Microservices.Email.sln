@@ -18,7 +18,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrainCloud.Microservices.Em
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrainCloud.Microservices.Email.Models", "TrainCloud.Microservices.Email.Models\TrainCloud.Microservices.Email.Models.csproj", "{026AC16B-BD47-4501-8A7F-3A1068B1E344}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrainCloud.Tests.Microservices.Email", "TrainCloud.Tests.Microservices.Email\TrainCloud.Tests.Microservices.Email.csproj", "{74590E58-532A-4638-8F2B-57495E952C84}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrainCloud.Tests.Microservices.Email", "TrainCloud.Tests.Microservices.Email\TrainCloud.Tests.Microservices.Email.csproj", "{74590E58-532A-4638-8F2B-57495E952C84}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
