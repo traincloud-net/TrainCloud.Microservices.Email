@@ -14,7 +14,7 @@
 
 		<ItemGroup>
 				<PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
-				<PackageReference Include="TrainCloud.Microservices.Core" Version="0.0.48" />
+				<PackageReference Include="TrainCloud.Microservices.Core" Version="0.0.55" />
 		</ItemGroup>
 
 		<ItemGroup>
