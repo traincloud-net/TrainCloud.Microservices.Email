@@ -25,7 +25,7 @@
 						<PrivateAssets>all</PrivateAssets>
 						<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 				</PackageReference>
-				<PackageReference Include="TrainCloud.HttpClient" Version="0.0.9" />
+				<PackageReference Include="TrainCloud.HttpClient" Version="0.0.10" />
 				<PackageReference Include="TrainCloud.Tests.Microservices.Core" Version="0.0.5" />
 		</ItemGroup>
 
