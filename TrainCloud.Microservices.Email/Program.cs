@@ -9,7 +9,12 @@ var webApplicationBuilder = WebApplication.CreateBuilder(args);
 if (!webApplicationBuilder.Environment.IsProduction())
 {
     // Login as microservice-email-dev@traincloud.iam.gserviceaccount.com
-    Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "google.cloud.json");
+    // Check out and sync the Credentials repository in your local TrainCloud folder
+    // ./TrainCloud/Credentials/...
+    // ./TrainCloud/TrainCloud.Microservices.Email/...
+    Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "../../Credentials/serviceaccounts/microservice-email-dev.json");
+
+    Environment.SetEnvironmentVariable("JWT_ISSUERSIGNINGKEY", Guid.Empty.ToString());
 }
 
 webApplicationBuilder.Services.AddTrainCloudAuthorization();
