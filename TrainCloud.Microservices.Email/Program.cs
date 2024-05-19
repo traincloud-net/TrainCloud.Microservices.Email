@@ -3,6 +3,7 @@ using TrainCloud.Microservices.Core.Extensions.Authentication;
 using TrainCloud.Microservices.Core.Extensions.Authorization;
 using TrainCloud.Microservices.Core.Extensions.Swagger;
 using TrainCloud.Microservices.Core.Filters.Exception;
+using TrainCloud.Microservices.Core.Services.MessageBus;
 using TrainCloud.Microservices.Email.Models;
 using TrainCloud.Microservices.Email.Services.Email;
 using TrainCloud.Microservices.Email.Services.MessageBus;
@@ -37,6 +38,7 @@ webApplicationBuilder.Services.AddControllers(controllerOptions =>
     controllerOptions.Filters.Add<GlobalExceptionFilter>();
 });
 
+webApplicationBuilder.Services.AddTrainCloudMessageBusPublisher();
 webApplicationBuilder.Services.AddHostedService<NewEmailMessageBusSubscriberService>(service =>
     new NewEmailMessageBusSubscriberService(service.GetRequiredService<IConfiguration>(),
                                             service.GetRequiredService<ILogger<NewEmailMessageBusSubscriberService>>(),

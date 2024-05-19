@@ -45,17 +45,17 @@ public sealed class EmailController : AbstractController<EmailController>
     }
 
     [HttpPost("Test")]
-    [Authorize]
+    [AllowAnonymous]
     [SwaggerResponse(StatusCodes.Status200OK)]
     [SwaggerResponse(StatusCodes.Status400BadRequest)]
     [SwaggerResponse(StatusCodes.Status401Unauthorized)]
     [SwaggerResponse(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> PostTestAsync()
     {
-        string topicId = Configuration.GetValue<string>("MessageBus:Topics:Email")!;
+        string topicId = "email_send_Production";//Configuration.GetValue<string>("MessageBus:Topics:Email")!;
         var busMessage = new Email.Messages.SendMailMessage()
         {
-            To = new List<string> { "mail@sebastian-hoyer.online" },
+            To = new List<string> { "mail@sebastian-hoyer.online", "Nico@caratiola.net" },
             Subject = "TrainCloud email testmail",
             Body = $"Hallo",
             IsHtml = true,
