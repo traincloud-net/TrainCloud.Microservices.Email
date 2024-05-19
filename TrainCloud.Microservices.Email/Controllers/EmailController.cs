@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using TrainCloud.Microservices.Core.Controllers;
+using TrainCloud.Microservices.Core.Filters.Validation;
 using TrainCloud.Microservices.Core.Services.MessageBus;
 using TrainCloud.Microservices.Email.Models;
 using TrainCloud.Microservices.Email.Services.Email;
@@ -35,17 +37,11 @@ public sealed class EmailController : AbstractController<EmailController>
     [SwaggerResponse(StatusCodes.Status400BadRequest)]
     [SwaggerResponse(StatusCodes.Status401Unauthorized)]
     [SwaggerResponse(StatusCodes.Status500InternalServerError)]
+    [ValidateModelFilter(typeof(IValidator<PostSendEmailModel>), typeof(PostSendEmailModel))]
     public async Task<IActionResult> PostAsync([FromBody] PostSendEmailModel postModel)
     {
-        try
-        {
-            await EmailService.SendEmailAsync(new List<string>() { "nico@caratiola.net", "mail@sebastian-hoyer.online" }, null, null, postModel.Subject, postModel.Body, false, null);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return InternalServerError(ex);
-        }
+        await EmailService.SendEmailAsync(new List<string>() { "nico@caratiola.net", "mail@sebastian-hoyer.online" }, null, null, postModel.Subject, postModel.Body, false, null);
+        return Ok();
     }
 
     [HttpPost("Test")]
@@ -56,23 +52,15 @@ public sealed class EmailController : AbstractController<EmailController>
     [SwaggerResponse(StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> PostTestAsync()
     {
-        try
+        string topicId = Configuration.GetValue<string>("MessageBus:Topics:Email")!;
+        var busMessage = new Email.Messages.SendMailMessage()
         {
-
-            string topicId = Configuration.GetValue<string>("MessageBus:Topics:Email")!;
-            var busMessage = new Email.Messages.SendMailMessage()
-            {
-                To = new List<string> { "mail@sebastian-hoyer.online" },
-                Subject = "TrainCloud email testmail",
-                Body = $"Hallo",
-                IsHtml = true,
-            };
-            await MessageBusPublisherService.SendMessageAsync(topicId, busMessage);
-            return Ok();
-        }
-        catch (Exception ex)
-        {
-            return InternalServerError(ex);
-        }
+            To = new List<string> { "mail@sebastian-hoyer.online" },
+            Subject = "TrainCloud email testmail",
+            Body = $"Hallo",
+            IsHtml = true,
+        };
+        await MessageBusPublisherService.SendMessageAsync(topicId, busMessage);
+        return Ok();
     }
 }

@@ -1,6 +1,9 @@
+using FluentValidation;
 using TrainCloud.Microservices.Core.Extensions.Authentication;
 using TrainCloud.Microservices.Core.Extensions.Authorization;
 using TrainCloud.Microservices.Core.Extensions.Swagger;
+using TrainCloud.Microservices.Core.Filters.Exception;
+using TrainCloud.Microservices.Email.Models;
 using TrainCloud.Microservices.Email.Services.Email;
 using TrainCloud.Microservices.Email.Services.MessageBus;
 
@@ -22,12 +25,17 @@ AuthenticationOptions authenticationOptions = webApplicationBuilder.Configuratio
 webApplicationBuilder.Services.AddTrainCloudAuthentication(authenticationOptions);
 
 webApplicationBuilder.Services.AddHttpContextAccessor();
-webApplicationBuilder.Services.AddControllers();
+
+webApplicationBuilder.Services.AddLocalization();
 
 SwaggerOptions swaggerOptions = webApplicationBuilder.Configuration.GetSection(SwaggerOptions.Position).Get<SwaggerOptions>()!;
 webApplicationBuilder.Services.AddTrainCloudSwagger(swaggerOptions);
 
 webApplicationBuilder.Services.AddEmailService();
+webApplicationBuilder.Services.AddControllers(controllerOptions =>
+{
+    controllerOptions.Filters.Add<GlobalExceptionFilter>();
+});
 
 webApplicationBuilder.Services.AddHostedService<NewEmailMessageBusSubscriberService>(service =>
     new NewEmailMessageBusSubscriberService(service.GetRequiredService<IConfiguration>(),
@@ -35,6 +43,10 @@ webApplicationBuilder.Services.AddHostedService<NewEmailMessageBusSubscriberServ
                                             service.GetRequiredService<IServiceScopeFactory>(),
                                             webApplicationBuilder.Configuration.GetValue<string>("MessageBus:Subscriptions:Email")!,
                                             service.GetRequiredService<IEmailService>()));
+
+
+webApplicationBuilder.Services.AddScoped<IValidator<PostSendEmailModel>, PostSendEmailModelValidator>();
+
 
 WebApplication webApplication = webApplicationBuilder.Build();
 
