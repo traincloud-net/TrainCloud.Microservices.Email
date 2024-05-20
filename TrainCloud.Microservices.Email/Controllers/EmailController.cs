@@ -56,8 +56,8 @@ public sealed class EmailController : AbstractController<EmailController>
         var busMessage = new Email.Messages.SendMailMessage()
         {
             To = new List<string> { "mail@sebastian-hoyer.online", "Nico@caratiola.net" },
-            Subject = "TrainCloud email testmail",
-            Body = $"Hallo",
+            Subject = "Хмарний поїзд email testmail 🍻",
+            Body = $"Hallo DING DING DING! 🎉 Sent at:⌚ {DateTime.Now}",
             IsHtml = true,
         };
         await MessageBusPublisherService.SendMessageAsync(topicId, busMessage);
