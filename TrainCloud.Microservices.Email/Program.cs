@@ -38,7 +38,6 @@ webApplicationBuilder.Services.AddControllers(controllerOptions =>
     controllerOptions.Filters.Add<GlobalExceptionFilter>();
 });
 
-webApplicationBuilder.Services.AddTrainCloudMessageBusPublisher();
 webApplicationBuilder.Services.AddHostedService<NewEmailMessageBusSubscriberService>(service =>
     new NewEmailMessageBusSubscriberService(service.GetRequiredService<IConfiguration>(),
                                             service.GetRequiredService<ILogger<NewEmailMessageBusSubscriberService>>(),
@@ -46,9 +45,7 @@ webApplicationBuilder.Services.AddHostedService<NewEmailMessageBusSubscriberServ
                                             webApplicationBuilder.Configuration.GetValue<string>("MessageBus:Subscriptions:Email")!,
                                             service.GetRequiredService<IEmailService>()));
 
-
 webApplicationBuilder.Services.AddScoped<IValidator<PostSendEmailModel>, PostSendEmailModelValidator>();
-
 
 WebApplication webApplication = webApplicationBuilder.Build();
 

@@ -43,24 +43,4 @@ public sealed class EmailController : AbstractController<EmailController>
         await EmailService.SendEmailAsync(new List<string>() { "nico@caratiola.net", "mail@sebastian-hoyer.online" }, null, null, postModel.Subject, postModel.Body, false, null);
         return Ok();
     }
-
-    [HttpPost("Test")]
-    [AllowAnonymous]
-    [SwaggerResponse(StatusCodes.Status200OK)]
-    [SwaggerResponse(StatusCodes.Status400BadRequest)]
-    [SwaggerResponse(StatusCodes.Status401Unauthorized)]
-    [SwaggerResponse(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> PostTestAsync()
-    {
-        string topicId = "email_send_Production";//Configuration.GetValue<string>("MessageBus:Topics:Email")!;
-        var busMessage = new Email.Messages.SendMailMessage()
-        {
-            To = new List<string> { "mail@sebastian-hoyer.online", "Nico@caratiola.net" },
-            Subject = "Хмарний поїзд email testmail 🍻",
-            Body = $"Hallo DING DING DING! 🎉 Sent at:⌚ {DateTime.Now}",
-            IsHtml = true,
-        };
-        await MessageBusPublisherService.SendMessageAsync(topicId, busMessage);
-        return Ok();
-    }
 }

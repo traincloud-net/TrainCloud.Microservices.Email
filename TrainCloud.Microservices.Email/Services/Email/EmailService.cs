@@ -21,6 +21,7 @@ public sealed class EmailService : AbstractService<EmailService>, IEmailService
                                      bool isBodyHtml,
                                      Dictionary<string, byte[]>? attachments)
     {
+
         using MailMessage mail = new MailMessage();
 
         mail.From = new MailAddress("mail@traincloud.net", "TrainCloud");
@@ -64,7 +65,6 @@ public sealed class EmailService : AbstractService<EmailService>, IEmailService
         }
 
         using SmtpClient client = new SmtpClient("smtp.ionos.de", 587);
-
         client.Credentials = new NetworkCredential("mail@traincloud.net", "9N!@&^T5F5V5agw");
         client.EnableSsl = true;
 
