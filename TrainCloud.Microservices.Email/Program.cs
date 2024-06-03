@@ -10,13 +10,19 @@ using TrainCloud.Microservices.Email.Services.MessageBus;
 
 var webApplicationBuilder = WebApplication.CreateBuilder(args);
 
-if (!webApplicationBuilder.Environment.IsProduction())
+if (webApplicationBuilder.Environment.IsDevelopment())
 {
     // Login as microservice-email-dev@traincloud.iam.gserviceaccount.com
     // Check out and sync the Credentials repository in your local TrainCloud folder
     // ./TrainCloud/Credentials/...
     // ./TrainCloud/TrainCloud.Microservices.Email/...
     Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "../../Credentials/serviceaccounts/microservice-email-dev.json");
+
+    Environment.SetEnvironmentVariable("JWT_ISSUERSIGNINGKEY", Guid.Empty.ToString());
+}
+else if (webApplicationBuilder.Environment.EnvironmentName == "Test")
+{
+    Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "../../../../../Credentials/serviceaccounts/microservice-email-dev.json");
 
     Environment.SetEnvironmentVariable("JWT_ISSUERSIGNINGKEY", Guid.Empty.ToString());
 }
