@@ -1,8 +1,9 @@
 name: SonarQube
 
 on:
-  workflow_dispatch:
   push:
+    branches:
+      - master
     tags:
     - "v[0-9]+.[0-9]+.[0-9]+"
 
@@ -48,6 +49,14 @@ jobs:
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
 
+      - name: Clean and restore
+        shell: powershell
+        run: |
+          dotnet clean          
+          dotnet restore
+        env:
+          NuGetPackageSourceCredentials_TrainCloud: Username=${{ secrets.TRAINCLOUD_CHECKOUT_USER }};Password=${{ secrets.TRAINCLOUD_CHECKOUT_TOKEN }}
+
       - name: Build and analyze        
         shell: powershell
         run: |
@@ -57,5 +66,3 @@ jobs:
           dotnet build --no-incremental
           dotnet-coverage collect 'dotnet test' -f xml  -o 'coverage.xml'
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
-        env:
-          NuGetPackageSourceCredentials_TrainCloud: Username=${{ secrets.TRAINCLOUD_CHECKOUT_USER }};Password=${{ secrets.TRAINCLOUD_CHECKOUT_TOKEN }}
