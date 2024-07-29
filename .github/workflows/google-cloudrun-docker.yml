@@ -29,7 +29,7 @@ jobs:
           registry: 'europe-docker.pkg.dev'
 
       - name: Build Container
-        run: docker build -t "europe-docker.pkg.dev/traincloud/traincloud-microservices/traincloud-microservices-email:${{ github.sha }}"  --build-arg NuGetPackageSourceCredentials_TrainCloud="Username=${{ secrets.TRAINCLOUD_CHECKOUT_USER }};Password=${{ secrets.TRAINCLOUD_CHECKOUT_TOKEN }}" . 
+        run: docker build -t "europe-docker.pkg.dev/traincloud/traincloud-microservices/traincloud-microservices-email:${{ github.sha }}" --build-arg NuGetPackageSourceCredentials_TrainCloud="Username=${{ secrets.TRAINCLOUD_CHECKOUT_USER }};Password=${{ secrets.TRAINCLOUD_CHECKOUT_TOKEN }}" . 
 
       - name: Push Container to Google Artifact Registry
         run: docker push "europe-docker.pkg.dev/traincloud/traincloud-microservices/traincloud-microservices-email:${{ github.sha }}"
