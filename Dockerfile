@@ -1,8 +1,12 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
 WORKDIR /App
+ARG NuGetPackageSourceCredentials_TrainCloud
 
 # Copy everything
 COPY . ./
+
+# Authorize for TrainCloud NuGet packages
+ENV NuGetPackageSourceCredentials_TrainCloud ${NuGetPackageSourceCredentials_TrainCloud}
 
 # Build and publish a release
 RUN dotnet clean

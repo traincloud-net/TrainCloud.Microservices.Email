@@ -34,4 +34,8 @@
 				<ProjectReference Include="..\TrainCloud.Microservices.Email\TrainCloud.Microservices.Email.csproj" />
 		</ItemGroup>
 
+  <ItemGroup>
+    <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+  </ItemGroup>
+
 </Project>
