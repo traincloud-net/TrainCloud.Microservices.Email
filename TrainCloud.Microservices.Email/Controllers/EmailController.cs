@@ -15,27 +15,21 @@ namespace TrainCloud.Microservices.Email.Controllers;
 public sealed class EmailController : AbstractController<EmailController>
 {
     private IEmailService EmailService { get; init; }
-    private IMessageBusPublisherService MessageBusPublisherService { get; init; }
-
 
     public EmailController(IWebHostEnvironment webHostEnvironment,
                            IHttpContextAccessor httpContextAccessor,
                            IConfiguration configuration,
                            ILogger<EmailController> logger,
-                           IEmailService emailService,
-                           IMessageBusPublisherService messageBusPublisherService)
+                           IEmailService emailService)
         : base(webHostEnvironment, httpContextAccessor, configuration, logger)
     {
         EmailService = emailService;
-        MessageBusPublisherService = messageBusPublisherService;
     }
 
     [HttpPost("Send")]
     [Authorize]
     [Consumes("application/json")]
     [SwaggerResponse(StatusCodes.Status200OK)]
-    [SwaggerResponse(StatusCodes.Status400BadRequest)]
-    [SwaggerResponse(StatusCodes.Status401Unauthorized)]
     [SwaggerResponse(StatusCodes.Status500InternalServerError)]
     [ValidateModelFilter(typeof(IValidator<PostSendEmailModel>), typeof(PostSendEmailModel))]
     public async Task<IActionResult> PostAsync([FromBody] PostSendEmailModel postModel)

@@ -1,9 +1,7 @@
 using FluentValidation;
 using TrainCloud.Microservices.Core.Extensions.Authentication;
-using TrainCloud.Microservices.Core.Extensions.Authorization;
 using TrainCloud.Microservices.Core.Extensions.Swagger;
 using TrainCloud.Microservices.Core.Filters.Exception;
-using TrainCloud.Microservices.Core.Services.MessageBus;
 using TrainCloud.Microservices.Email.Models;
 using TrainCloud.Microservices.Email.Services.Email;
 using TrainCloud.Microservices.Email.Services.MessageBus;
@@ -20,14 +18,8 @@ if (webApplicationBuilder.Environment.IsDevelopment())
 
     Environment.SetEnvironmentVariable("JWT_ISSUERSIGNINGKEY", Guid.Empty.ToString());
 }
-else if (webApplicationBuilder.Environment.EnvironmentName == "Test")
-{
-    Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "../../../../../Credentials/serviceaccounts/microservice-email-dev.json");
 
-    Environment.SetEnvironmentVariable("JWT_ISSUERSIGNINGKEY", Guid.Empty.ToString());
-}
-
-webApplicationBuilder.Services.AddTrainCloudAuthorization();
+webApplicationBuilder.Services.AddAuthorization();
 AuthenticationOptions authenticationOptions = webApplicationBuilder.Configuration.GetSection(AuthenticationOptions.Position).Get<AuthenticationOptions>()!;
 webApplicationBuilder.Services.AddTrainCloudAuthentication(authenticationOptions);
 
@@ -59,9 +51,3 @@ webApplication.UseTrainCloudSwagger();
 webApplication.UseAuthorization();
 webApplication.MapControllers();
 webApplication.Run();
-
-/// <summary>
-/// The class definition is required to make this service testable
-/// TrainCloud.Tests.Microservices.Email requires a visible Program class for the WebApplicationFactory
-/// </summary>
-public partial class Program { }
