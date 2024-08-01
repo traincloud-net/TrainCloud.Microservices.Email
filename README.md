@@ -48,14 +48,12 @@ dotnet add package TrainCloud.Microservices.Email.Messages
 dotnet add package TrainCloud.Microservices.Core
 ```
 
-### IUicNumberService
-
-Add MessageBusPublisher
+### Add MessageBusPublisher
 ```csharp
 webApplicationBuilder.Services.AddTrainCloudMessageBusPublisher();
 ```
 
-Use the service as required
+### Use the service as required
 ```csharp
 [inject]
 protected IMessageBusPublisherService MessageBusPublisherService  { get; init; }
