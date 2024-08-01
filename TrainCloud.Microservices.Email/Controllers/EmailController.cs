@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using TrainCloud.Microservices.Core.Controllers;
 using TrainCloud.Microservices.Core.Filters.Validation;
-using TrainCloud.Microservices.Core.Services.MessageBus;
 using TrainCloud.Microservices.Email.Models;
 using TrainCloud.Microservices.Email.Services.Email;
 
@@ -34,7 +33,8 @@ public sealed class EmailController : AbstractController<EmailController>
     [ValidateModelFilter(typeof(IValidator<PostSendEmailModel>), typeof(PostSendEmailModel))]
     public async Task<IActionResult> PostAsync([FromBody] PostSendEmailModel postModel)
     {
-        await EmailService.SendEmailAsync(new List<string>() { "nico@caratiola.net", "mail@sebastian-hoyer.online" }, null, null, postModel.Subject, postModel.Body, false, null);
+        string subject = $"ContactForm from {postModel.FromName} {postModel.FromEmail}: {postModel.Subject}";
+        await EmailService.SendEmailAsync(new List<string>() { "nico@caratiola.net", "mail@sebastian-hoyer.online" }, null, null, subject, postModel.Body, false, null);
         return Ok();
     }
 }

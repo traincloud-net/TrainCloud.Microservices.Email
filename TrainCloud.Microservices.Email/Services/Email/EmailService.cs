@@ -66,8 +66,9 @@ public sealed class EmailService : AbstractService<EmailService>, IEmailService
         string? emailServer = Environment.GetEnvironmentVariable("EMAIL_SERVER");
         string? emailUserName = Environment.GetEnvironmentVariable("EMAIL_USERNAME");
         string? emailPassword = Environment.GetEnvironmentVariable("EMAIL_PASSWORD");
+        int emailPort = int.Parse(Environment.GetEnvironmentVariable("EMAIL_PORT")!);
 
-        using SmtpClient client = new SmtpClient(emailServer, 587);
+        using SmtpClient client = new SmtpClient(emailServer, emailPort);
         client.Credentials = new NetworkCredential(emailUserName, emailPassword);
         client.EnableSsl = true;
 
