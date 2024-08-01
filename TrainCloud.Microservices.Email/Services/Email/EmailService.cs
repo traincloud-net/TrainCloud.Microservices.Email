@@ -1,5 +1,5 @@
-﻿using System.Net.Mail;
-using System.Net;
+﻿using System.Net;
+using System.Net.Mail;
 using TrainCloud.Microservices.Core.Services;
 
 namespace TrainCloud.Microservices.Email.Services.Email;
