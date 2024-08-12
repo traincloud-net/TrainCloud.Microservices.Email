@@ -19,7 +19,14 @@ public sealed class NewEmailMessageBusSubscriberService : AbstractMessageBusSubs
     }
 
     public override async Task OnMessageAsync(SendMailMessage message) 
-    {        
-        await EmailService.SendEmailAsync(message.To, message.Cc, message.Cc, message.Subject, message.Body, message.IsHtml, message.Attachments);
+    {
+        try
+        {
+            await EmailService.SendEmailAsync(message.To, message.Cc, message.Cc, message.Subject, message.Body, message.IsHtml, message.Attachments);
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, ex.Message);
+        }
     }
 }
