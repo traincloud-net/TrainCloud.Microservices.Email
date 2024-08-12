@@ -21,6 +21,16 @@ public sealed class EmailService : AbstractService<EmailService>, IEmailService
                                      bool isBodyHtml,
                                      Dictionary<string, byte[]>? attachments)
     {
+        if(string.IsNullOrEmpty(subject))
+        {
+            throw new ArgumentNullException(nameof(subject));
+        }
+
+        if (string.IsNullOrEmpty(body))
+        {
+            throw new ArgumentNullException(nameof(body));
+        }
+
         using MailMessage mail = new MailMessage();
 
         mail.From = new MailAddress("mail@traincloud.net", "TrainCloud");
@@ -29,7 +39,10 @@ public sealed class EmailService : AbstractService<EmailService>, IEmailService
         {
             foreach (string toAddress in to)
             {
-                mail.To.Add(new MailAddress(toAddress));
+                if (toAddress is not null)
+                {
+                    mail.To.Add(new MailAddress(toAddress));
+                }
             }
         }
 
@@ -37,7 +50,10 @@ public sealed class EmailService : AbstractService<EmailService>, IEmailService
         {
             foreach (string ccAdress in cc)
             {
-                mail.CC.Add(new MailAddress(ccAdress));
+                if (ccAdress is not null)
+                {
+                    mail.CC.Add(new MailAddress(ccAdress));
+                }
             }
         }
 
@@ -45,7 +61,10 @@ public sealed class EmailService : AbstractService<EmailService>, IEmailService
         {
             foreach (string bccAddress in bcc)
             {
-                mail.Bcc.Add(new MailAddress(bccAddress));
+                if (bccAddress is not null)
+                {
+                    mail.Bcc.Add(new MailAddress(bccAddress));
+                }
             }
         }
 
@@ -57,9 +76,16 @@ public sealed class EmailService : AbstractService<EmailService>, IEmailService
         {
             foreach (KeyValuePair<string, byte[]> attachment in attachments)
             {
-                var stream = new MemoryStream(attachment.Value);
-                var a = new Attachment(stream, attachment.Key, null);
-                mail.Attachments.Add(a);
+                if (string.IsNullOrEmpty(attachment.Key) && attachment.Value.Length > 1)
+                {
+                    var stream = new MemoryStream(attachment.Value);
+                    var a = new Attachment(stream, attachment.Key, null);
+                    mail.Attachments.Add(a);
+                }
+                else
+                {
+                    throw new ArgumentException("Attachment is not valid.");
+                }
             }
         }
 
