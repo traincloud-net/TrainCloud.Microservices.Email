@@ -76,7 +76,7 @@ public sealed class EmailService : AbstractService<EmailService>, IEmailService
         {
             foreach (KeyValuePair<string, byte[]> attachment in attachments)
             {
-                if (string.IsNullOrEmpty(attachment.Key) && attachment.Value.Length > 1)
+                if (!string.IsNullOrEmpty(attachment.Key) && attachment.Value.Length > 0)
                 {
                     var stream = new MemoryStream(attachment.Value);
                     var a = new Attachment(stream, attachment.Key, null);
