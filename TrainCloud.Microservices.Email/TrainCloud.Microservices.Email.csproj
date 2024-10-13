@@ -8,8 +8,8 @@
 		</PropertyGroup>
 
 		<ItemGroup>
-				<PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
-				<PackageReference Include="TrainCloud.Microservices.Core" Version="0.0.83" />
+				<PackageReference Include="Swashbuckle.AspNetCore" Version="6.8.1" />
+				<PackageReference Include="TrainCloud.Microservices.Core" Version="0.0.87" />
 		</ItemGroup>
 
 		<ItemGroup>
