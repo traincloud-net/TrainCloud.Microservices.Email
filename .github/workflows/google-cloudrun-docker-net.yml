@@ -40,4 +40,7 @@ jobs:
         with:
           service: traincloud-microservices-email
           region: europe-west3
+          env_vars: |-
+            ASPNETCORE_ENVIRONMENT=Production
+            TRAINCLOUD_REGION=europe-west3
           image: "europe-docker.pkg.dev/traincloud/traincloud-microservices/traincloud-microservices-email:${{ github.sha }}"
