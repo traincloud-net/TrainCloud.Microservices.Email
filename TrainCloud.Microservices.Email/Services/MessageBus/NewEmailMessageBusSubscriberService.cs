@@ -13,7 +13,7 @@ public sealed class NewEmailMessageBusSubscriberService : AbstractMessageBusSubs
                                                IServiceScopeFactory serviceScopeFactory,
                                                string subscriptionId,
                                                IEmailService emailService)
-        : base(configuration, logger, serviceScopeFactory, subscriptionId)
+        : base(configuration, logger, serviceScopeFactory, subscriptionId, true)
     {
         EmailService = emailService;
     }
