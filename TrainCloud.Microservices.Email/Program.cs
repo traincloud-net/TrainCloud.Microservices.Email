@@ -9,20 +9,17 @@ using TrainCloud.Microservices.Email.Services.MessageBus;
 
 var webApplicationBuilder = WebApplication.CreateBuilder(args);
 
-    // Login as microservice-email-dev@traincloud.iam.gserviceaccount.com
-    // Check out and sync the Credentials repository in your local TrainCloud folder
-    // ./TrainCloud/Credentials/...
-    // ./TrainCloud/TrainCloud.Microservices.Email/...
 string environmentName = webApplicationBuilder.Environment.EnvironmentName;
+
+// Login as microservice-email-dev@traincloud.iam.gserviceaccount.com
+// Check out and sync the Credentials repository in your local TrainCloud folder
+// ./TrainCloud/Credentials/...
+// ./TrainCloud/TrainCloud.Microservices.Email/...
 if (environmentName == "Local")
 {
-    Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "../../Credentials/serviceaccounts/microservice-email-dev.json");
+    Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "../../Credentials/serviceaccounts/sa-email-local.json");
 
     Environment.SetEnvironmentVariable("JWT_ISSUERSIGNINGKEY", Guid.Empty.ToString());
-}
-else if (environmentName == "Tests")
-{
-    Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "../../../../../Credentials/serviceaccounts/sa-email-local.json");
 }
 
 webApplicationBuilder.Services.AddAuthorization();

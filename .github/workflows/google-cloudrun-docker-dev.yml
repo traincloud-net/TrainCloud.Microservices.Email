@@ -34,7 +34,7 @@ jobs:
       - name: Push Container to Google Artifact Registry
         run: docker push "europe-docker.pkg.dev/traincloud/traincloud-microservices/traincloud-microservices-email:${{ github.sha }}"
 
-      - name: Deploy Container to Google Cloud Run 
+      - name: Deploy Container to Google Cloud Run (europe-west3)
         id: deploy
         uses: google-github-actions/deploy-cloudrun@v2
         with:
