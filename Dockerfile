@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build-env
 WORKDIR /App
 ARG NuGetPackageSourceCredentials_TrainCloud
 
@@ -14,7 +14,7 @@ RUN dotnet restore
 RUN dotnet publish TrainCloud.Microservices.Email/TrainCloud.Microservices.Email.csproj -c Release -o out
 
 # Build runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:8.0
+FROM mcr.microsoft.com/dotnet/aspnet:9.0
 WORKDIR /App
 COPY --from=build-env /App/out .
 ENTRYPOINT ["dotnet", "TrainCloud.Microservices.Email.dll"]

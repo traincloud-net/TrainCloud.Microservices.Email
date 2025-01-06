@@ -1,4 +1,4 @@
-name: Build and deploy to Cloud Run
+name: Deploy to api.traincloud.net
 
 on:
   workflow_dispatch:
