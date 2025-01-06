@@ -38,7 +38,7 @@ jobs:
         id: deploy
         uses: google-github-actions/deploy-cloudrun@v2
         with:
-          service: traincloud-microservices-email
+          service: dev-traincloud-microservices-email-west3
           region: europe-west3
           env_vars: |-
             ASPNETCORE_ENVIRONMENT=Development

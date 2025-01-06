@@ -9,7 +9,7 @@ Services using tis service:
 * TrainCloud.Microservices.Disturbances
 * TrainCloud.Microservices.
 
-Sender Address is always `mail@traincloud.com`
+Sender Address is always `mail@traincloud.net` production or `mail@traincloud.dev` in development
 
 ## Status
 
