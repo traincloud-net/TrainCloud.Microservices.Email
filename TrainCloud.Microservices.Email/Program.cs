@@ -10,7 +10,7 @@ using TrainCloud.Microservices.Email.Services.MessageBus;
 var webApplicationBuilder = WebApplication.CreateBuilder(args);
 string environmentName = webApplicationBuilder.Environment.EnvironmentName;
 
-// Login as microservice-email-dev@traincloud.iam.gserviceaccount.com
+// Login as sa-email-local@traincloud.iam.gserviceaccount.com
 // Check out and sync the Credentials repository in your local TrainCloud folder
 // ./TrainCloud/Credentials/...
 // ./TrainCloud/TrainCloud.Microservices.Email/...
