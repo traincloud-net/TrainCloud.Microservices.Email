@@ -1,4 +1,4 @@
-name: Deploy to api.traincloud.dev
+name: Deploy to api.traincloud.dev (Development)
 
 on:
   workflow_dispatch:

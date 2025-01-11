@@ -1,4 +1,4 @@
-name: Deploy to api.traincloud.net
+name: Deploy to api.traincloud.net (Production)
 
 on:
   workflow_dispatch:
