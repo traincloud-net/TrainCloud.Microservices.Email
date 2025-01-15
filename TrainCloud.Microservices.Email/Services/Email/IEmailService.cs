@@ -8,6 +8,7 @@ public interface IEmailService
                         string subject,
                         string body,
                         bool isBodyHtml,
-                        Dictionary<string, byte[]>? attachments);
+                        Dictionary<string, byte[]>? attachments,
+                        byte priority = 0);
 }
 

@@ -19,5 +19,10 @@ public class SendMailMessage
     public bool IsHtml { get; set; }
 
     public Dictionary<string, byte[]>? Attachments { get; set; }
+
+    /// <summary>
+    /// 0 = normal, 1 = Low, 2 = High
+    /// </summary>
+    public byte Priority { get; set; } = 0;
 }
 

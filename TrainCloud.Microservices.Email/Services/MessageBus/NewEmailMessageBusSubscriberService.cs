@@ -22,7 +22,7 @@ public sealed class NewEmailMessageBusSubscriberService : AbstractMessageBusSubs
     {
         try
         {
-            await EmailService.SendEmailAsync(message.To, message.Cc, message.Cc, message.Subject, message.Body, message.IsHtml, message.Attachments);
+            await EmailService.SendEmailAsync(message.To, message.Cc, message.Cc, message.Subject, message.Body, message.IsHtml, message.Attachments, message.Priority);
         }
         catch (Exception ex)
         {

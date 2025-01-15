@@ -15,11 +15,12 @@ public sealed class EmailService : AbstractService<EmailService>, IEmailService
 
     public async Task SendEmailAsync(List<string>? to,
                                      List<string>? cc,
-                                     List<string>? bcc,
+                                     List<string>? bcc, 
                                      string subject,
                                      string body,
                                      bool isBodyHtml,
-                                     Dictionary<string, byte[]>? attachments)
+                                     Dictionary<string, byte[]>? attachments,
+                                     byte priority = 0)
     {
         if(string.IsNullOrEmpty(subject))
         {
@@ -68,6 +69,7 @@ public sealed class EmailService : AbstractService<EmailService>, IEmailService
             }
         }
 
+        mail.Priority = (MailPriority) priority;
         mail.IsBodyHtml = isBodyHtml;
         mail.Subject = subject;
         mail.Body = body;
