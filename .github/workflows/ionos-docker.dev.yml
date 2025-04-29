@@ -23,9 +23,9 @@ jobs:
 
       - name: Build Docker image
         run: |          
-          docker build -t "${{ secrets.IONOS_CONTAINER_REGISTRY_HOSTNAME }}/trainCloud.microservices/trainCloud.microservices.email:${{ github.sha }}" .
+          docker build -t "${{ secrets.IONOS_CONTAINER_REGISTRY_HOSTNAME }}/microservices/email:${{ github.sha }}" .
 
       - name: Push Docker image
         run: |
-          docker push "${{ secrets.IONOS_CONTAINER_REGISTRY_HOSTNAME }}/trainCloud.microservices/trainCloud.microservices.email:${{ github.sha }}"
+          docker push "${{ secrets.IONOS_CONTAINER_REGISTRY_HOSTNAME }}/microservices/email:${{ github.sha }}"
         
