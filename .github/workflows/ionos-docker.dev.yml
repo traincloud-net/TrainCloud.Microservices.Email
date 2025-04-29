@@ -1,0 +1,31 @@
+name: Build and push to IONOS Container Registry
+
+on:
+  workflow_dispatch:
+  # push:
+  #   tags:
+  #   - "v[0-9]+.[0-9]+"
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Log in to IONOS Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry:  ${{ secrets.IONOS_CONTAINER_REGISTRY_HOSTNAME }}
+          username: ${{ secrets.IONOS_CONTAINER_REGISTRY_TOKENNAME }}
+          password:  ${{ secrets.IONOS_CONTAINER_REGISTRY_TOKEN  }}
+
+      - name: Build Docker image
+        run: |          
+          docker build -t "${{ secrets.IONOS_CONTAINER_REGISTRY_HOSTNAME }}/TrainCloud.Microservices/TrainCloud.Microservices.Email:${{ github.sha }}" .
+
+      - name: Push Docker image
+        run: |
+          docker push "${{ secrets.IONOS_CONTAINER_REGISTRY_HOSTNAME }}/TrainCloud.Microservices/TrainCloud.Microservices.Email:${{ github.sha }}"
+        
