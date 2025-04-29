@@ -23,9 +23,9 @@ jobs:
 
       - name: Build Docker image
         run: |          
-          docker build -t "${{ secrets.IONOS_CONTAINER_REGISTRY_HOSTNAME }}/microservices/email:${{ github.sha }}" .
+          docker build -t "${{ secrets.IONOS_CONTAINER_REGISTRY_HOSTNAME }}/traincloud.microservices/traincloud.microservices.email:${{ github.sha }}" --build-arg NuGetPackageSourceCredentials_TrainCloud="Username=${{ secrets.TRAINCLOUD_CHECKOUT_USER }};Password=${{ secrets.TRAINCLOUD_CHECKOUT_TOKEN }}" . 
 
       - name: Push Docker image
         run: |
-          docker push "${{ secrets.IONOS_CONTAINER_REGISTRY_HOSTNAME }}/microservices/email:${{ github.sha }}"
+          docker push "${{ secrets.IONOS_CONTAINER_REGISTRY_HOSTNAME }}/traincloud.microservices/traincloud.microservices.email:${{ github.sha }}"
         
