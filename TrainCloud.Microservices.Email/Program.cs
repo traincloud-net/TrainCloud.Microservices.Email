@@ -35,7 +35,7 @@ webApplicationBuilder.Services.AddTrainCloudSwagger(swaggerOptions);
 webApplicationBuilder.Services.AddEmailService();
 webApplicationBuilder.Services.AddControllers(controllerOptions =>
 {
-    controllerOptions.Filters.Add<GlobalExceptionFilter>();
+    controllerOptions.Filters.Add<GlobalExceptionFilterAttribute>();
 });
 
 webApplicationBuilder.Services.AddHostedService<NewEmailMessageBusSubscriberService>(service =>
