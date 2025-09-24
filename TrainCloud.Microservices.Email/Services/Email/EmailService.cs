@@ -72,7 +72,6 @@ public sealed class EmailService : AbstractService<EmailService>, IEmailService
             }
         }
 
-        mail.Bcc.Add(TrainCloudMailAddress);
         mail.Priority = (MailPriority) priority;
         mail.IsBodyHtml = isBodyHtml;
         mail.Subject = subject;
