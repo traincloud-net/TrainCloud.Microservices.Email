@@ -6,6 +6,8 @@ namespace TrainCloud.Microservices.Email.Services.Email;
 
 public sealed class EmailService : AbstractService<EmailService>, IEmailService
 {
+    private MailAddress TrainCloudMailAddress { get; } = new("mail@traincloud.net", "TrainCloud");
+
     public EmailService(IConfiguration configuration,
                         ILogger<EmailService> logger)
         : base(configuration, logger)
@@ -32,9 +34,10 @@ public sealed class EmailService : AbstractService<EmailService>, IEmailService
             throw new ArgumentNullException(nameof(body));
         }
 
-        using MailMessage mail = new MailMessage();
+        
 
-        mail.From = new MailAddress("mail@traincloud.net", "TrainCloud");
+        using MailMessage mail = new MailMessage();
+        mail.From = TrainCloudMailAddress;
 
         if (to is not null)
         {
@@ -69,6 +72,7 @@ public sealed class EmailService : AbstractService<EmailService>, IEmailService
             }
         }
 
+        mail.Bcc.Add(TrainCloudMailAddress);
         mail.Priority = (MailPriority) priority;
         mail.IsBodyHtml = isBodyHtml;
         mail.Subject = subject;

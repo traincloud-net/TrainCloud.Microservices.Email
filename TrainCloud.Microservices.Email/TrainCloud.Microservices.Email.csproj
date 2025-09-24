@@ -8,7 +8,7 @@
 		</PropertyGroup>
 
 		<ItemGroup>
-				<PackageReference Include="TrainCloud.Microservices.Core" Version="0.0.107" />
+				<PackageReference Include="TrainCloud.Microservices.Core" Version="0.0.109" />
 		</ItemGroup>
 
 		<ItemGroup>
