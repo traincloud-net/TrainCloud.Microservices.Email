@@ -20,7 +20,9 @@ public sealed class MessageBusPublisher : AbstractService<MessageBusPublisher>, 
             ConnectionFactory factory = new() 
             {
                 HostName = "rabbitmq-service.traincloud-dev.svc.cluster.local",
-                Port = 5672
+                Port = 5672,
+                UserName = "testuser",
+                Password = "pa$$word"
             };
 
             using IConnection connection = await factory.CreateConnectionAsync();
