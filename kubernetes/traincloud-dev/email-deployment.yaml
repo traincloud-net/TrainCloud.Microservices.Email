@@ -42,5 +42,25 @@ spec:
               value: "traincloud-dev"
             - name: ASPNETCORE_HTTP_PORTS
               value: "10103"
+            - name: EMAIL_SERVER
+              valueFrom:
+                secretKeyRef:
+                  name: email-credentials
+                  key: email_server
+            - name: EMAIL_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: email-credentials
+                  key: email_username
+            - name: EMAIL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: email-credentials
+                  key: email_password
+            - name: EMAIL_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: email-credentials
+                  key: email_port
       imagePullSecrets: 
         - name: traincloud-container-registry-credentials
