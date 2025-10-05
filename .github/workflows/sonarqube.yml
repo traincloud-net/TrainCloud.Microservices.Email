@@ -1,4 +1,4 @@
-name: SonarQube
+name: SonarQube with test coverage
 
 on:
   push:
@@ -7,34 +7,35 @@ on:
 
 jobs:
   build:
-    name: Build
+    name: Build and analyze
     runs-on: windows-latest
-    permissions: read-all
+    
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      
-      - name: Setup .NET
+
+      - name: Set up .NET 9.0 SDK
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 9.0.x
-        
+
       - name: Set up JDK 17
-        uses: actions/setup-java@v1
+        uses: actions/setup-java@v4
         with:
           java-version: 17
+          distribution: 'zulu' # Alternative distribution options are available.
 
       - name: Cache SonarQube packages
-        uses: actions/cache@v1
+        uses: actions/cache@v4
         with:
-          path: ~\sonar\cache
+          path: ~\.sonar\cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
 
       - name: Cache SonarQube scanner
         id: cache-sonar-scanner
-        uses: actions/cache@v1
+        uses: actions/cache@v4
         with:
           path: .\.sonar\scanner
           key: ${{ runner.os }}-sonar-scanner
@@ -47,6 +48,11 @@ jobs:
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
 
+      - name: Install dotnet-coverage 
+        shell: powershell
+        run: |
+          dotnet tool install --global dotnet-coverage  
+
       - name: Clean and restore
         shell: powershell
         run: |
@@ -55,9 +61,10 @@ jobs:
         env:
           NuGetPackageSourceCredentials_TrainCloud: Username=${{ secrets.TRAINCLOUD_CHECKOUT_USER }};Password=${{ secrets.TRAINCLOUD_CHECKOUT_TOKEN }}
 
-      - name: Build and analyze        
+      - name: Build and analyze
         shell: powershell
         run: |
           .\.sonar\scanner\dotnet-sonarscanner begin /k:"TrainCloud.Microservices.Email" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml
-          dotnet build --no-incremental
+          dotnet build
+          dotnet-coverage collect 'dotnet test' -f xml  -o 'coverage.xml'
           .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
