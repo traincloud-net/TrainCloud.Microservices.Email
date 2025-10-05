@@ -1,4 +1,6 @@
-﻿namespace TrainCloud.Microservices.Core.Services.MessageBus;
+﻿using RabbitMQ.Client;
+
+namespace TrainCloud.Microservices.Core.Services.MessageBus;
 
 public abstract class AbstractMessageBusSubscriber<TMessage> : AbstractService<AbstractMessageBusSubscriber<TMessage>>, IHostedService
 {
@@ -25,6 +27,7 @@ public abstract class AbstractMessageBusSubscriber<TMessage> : AbstractService<A
             try
             {
                 //Wait for RabbitMq Messages here
+                ConnectionFactory factory = new() { HostName = "rabbitmq-service.traincloud-net.svc.cluster.local" };
             }
             catch (Exception ex)
             {

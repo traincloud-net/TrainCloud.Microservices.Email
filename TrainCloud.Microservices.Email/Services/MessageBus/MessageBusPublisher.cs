@@ -15,7 +15,7 @@ public sealed class MessageBusPublisher : AbstractService<MessageBusPublisher>, 
 
     public async Task SendMessageAsync<TData>(string topicId, TData data)
     {
-        ConnectionFactory factory = new() { HostName = "_hostname" };
+        ConnectionFactory factory = new() { HostName = "rabbitmq-service.traincloud-net.svc.cluster.local" };
 
         using IConnection connection = await factory.CreateConnectionAsync();
         using IChannel channel = await connection.CreateChannelAsync();
@@ -32,15 +32,12 @@ public sealed class MessageBusPublisher : AbstractService<MessageBusPublisher>, 
         string dataJson = JsonSerializer.Serialize(data);
         var dataBytes = Encoding.UTF8.GetBytes(dataJson);
 
-        //// Set message as persistent
-        //var properties = channel.pr();
-        //properties.Persistent = true;
-
-       // Publish the message
-       //await channel.BasicPublishAsync(exchange: "",
-       //    routingKey: topicId,
-       //    basicProperties: properties,
-       //    body: dataBytes
-       //);
+        // Publish the message
+        await channel.BasicPublishAsync(
+            exchange: "",           // Default exchange
+            routingKey: topicId,    // Queue name as routing key
+            body: dataBytes,
+            mandatory: false
+        );
     }
 }

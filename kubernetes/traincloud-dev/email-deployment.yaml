@@ -26,7 +26,7 @@ spec:
         fsGroup: 10001
       containers:
         - name: email
-          image: traincloud.cr.de-fra.ionos.com/microservices/email:v0.0.11
+          image: traincloud.cr.de-fra.ionos.com/microservices/email:v0.0.12
           ports:
             - containerPort: 10103
           resources:
