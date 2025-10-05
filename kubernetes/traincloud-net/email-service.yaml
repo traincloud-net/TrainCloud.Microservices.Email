@@ -11,5 +11,5 @@ spec:
     app: email
   ports:
     - protocol: TCP
-      targetPort: 8080 # Container-Port
+      targetPort: 10203 # Container-Port
       port: 20203       # Cluster-intern

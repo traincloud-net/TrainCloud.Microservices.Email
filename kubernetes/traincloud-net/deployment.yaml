@@ -15,18 +15,32 @@ spec:
       labels:
         app: email
     spec:
-      serviceAccountName: storage-serviceaccount
+      serviceAccountName: email-serviceaccount
       automountServiceAccountToken: false
       nodeSelector:
         deployment_node: traincloud-net-microservices # Label in IONOS k8s node pool
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        runAsGroup: 10001
+        fsGroup: 10001
       containers:
         - name: email
-          image: traincloud.cr.de-fra.ionos.com/microservices/gateway@sha256:b32859fe4ede354dd6f7fb654a64034c6d06621ece4c03ed14a135579e701123 
+          image: traincloud.cr.de-fra.ionos.com/microservices/email:v0.0.10
           ports:
-            - containerPort: 8080
-          env:
+            - containerPort: 10203
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "128Mi"
+              ephemeral-storage: "256Mi"
+            limits:
+              memory: "256Mi"
+              ephemeral-storage: "512Mi"
           env:
             - name: TRAINCLOUD_SERVICE_ENVIRONMENT
               value: "traincloud-net"
+            - name: ASPNETCORE_HTTP_PORTS
+              value: "10203"
       imagePullSecrets: 
         - name: traincloud-container-registry-credentials
