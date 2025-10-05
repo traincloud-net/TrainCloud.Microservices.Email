@@ -3,12 +3,16 @@ using TrainCloud.Microservices.Core.Extensions.Authentication;
 using TrainCloud.Microservices.Core.Extensions.Swagger;
 using TrainCloud.Microservices.Core.Filters.Exception;
 using TrainCloud.Microservices.Core.Middleware.Localization;
+using TrainCloud.Microservices.Core.Services.MessageBus;
 using TrainCloud.Microservices.Email.Models;
 using TrainCloud.Microservices.Email.Services.Email;
+using TrainCloud.Microservices.Email.Services.MessageBus;
 
-
-Environment.SetEnvironmentVariable("JWT_ISSUERSIGNINGKEY", Guid.Empty.ToString());
 var webApplicationBuilder = WebApplication.CreateBuilder(args);
+if (!webApplicationBuilder.Environment.IsProduction())
+{
+    Environment.SetEnvironmentVariable("JWT_ISSUERSIGNINGKEY", Guid.Empty.ToString());
+}
 
 webApplicationBuilder.Services.AddAuthorization();
 AuthenticationOptions authenticationOptions = webApplicationBuilder.Configuration.GetSection(AuthenticationOptions.Position).Get<AuthenticationOptions>()!;
@@ -27,10 +31,11 @@ webApplicationBuilder.Services.AddControllers(controllerOptions =>
     controllerOptions.Filters.Add<GlobalExceptionFilterAttribute>();
 });
 
-//webApplicationBuilder.Services.AddHostedService<NewEmailMessageBusSubscriber>(serviceProvider =>
-//    new NewEmailMessageBusSubscriber(serviceProvider.GetRequiredService<IConfiguration>(),
-//                                     serviceProvider.GetRequiredService<ILogger<NewEmailMessageBusSubscriber>>(),
-//                                     serviceProvider.GetRequiredService<IEmailService>()));
+webApplicationBuilder.Services.AddScoped<MessageBusPublisher>();
+webApplicationBuilder.Services.AddHostedService<NewEmailMessageBusSubscriber>(serviceProvider =>
+    new NewEmailMessageBusSubscriber(serviceProvider.GetRequiredService<IConfiguration>(),
+                                     serviceProvider.GetRequiredService<ILogger<NewEmailMessageBusSubscriber>>(),
+                                     serviceProvider.GetRequiredService<IEmailService>()));
 
 webApplicationBuilder.Services.AddScoped<IValidator<PostSendEmailModel>, PostSendEmailModelValidator>();
 

@@ -42,6 +42,11 @@ spec:
               value: "traincloud-dev"
             - name: ASPNETCORE_HTTP_PORTS
               value: "10103"
+            - name: JWT_ISSUERSIGNINGKEY
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-credentials
+                  key: jwt_issuersigningkey
             - name: EMAIL_SERVER
               valueFrom:
                 secretKeyRef:
