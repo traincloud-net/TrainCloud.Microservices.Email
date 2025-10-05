@@ -1,0 +1,45 @@
+name: Deploy to IONOS Kubernetes Cluster
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: 'Docker image tag to deploy'
+        required: true
+        type: string
+      namespace:
+        description: 'Kubernetes namespace'
+        required: true
+        type: choice
+        options:
+          - traincloud-dev
+          - traincloud-net
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+      
+      - name: Configure kubectl
+        run: |
+          mkdir -p $HOME/.kube
+          echo "${{ secrets.IONOS_KUBECONFIG }}" > $HOME/.kube/config
+          chmod 600 $HOME/.kube/config
+
+      - name: Update Kubernetes deployment
+        run: |
+          kubectl set image deployment/email-deployment \
+            email=${{ secrets.IONOS_CONTAINER_REGISTRY_HOSTNAME }}/microservices/email:${{ inputs.image_tag }} \
+            --namespace=${{ inputs.namespace }}
+          
+      - name: Verify deployment
+        run: |
+          kubectl rollout status deployment/email-deployment --namespace=${{ inputs.namespace }} --timeout=5m

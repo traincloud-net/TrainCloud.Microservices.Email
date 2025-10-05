@@ -1,10 +1,9 @@
 name: Build and push to IONOS Container Registry
 
 on:
-  workflow_dispatch:
-  # push:
-  #   tags:
-  #   - "v[0-9]+.[0-9]+"
+  push:
+    tags:
+    - "v[0-9]+.[0-9]+.[0-9]+"
 
 jobs:
   deploy:
@@ -13,6 +12,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      
+      - name: Get the tag
+        id: get_tag
+        run: echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
 
       - name: Log in to IONOS Container Registry
         uses: docker/login-action@v3
@@ -23,9 +26,9 @@ jobs:
 
       - name: Build Docker image
         run: |          
-          docker build -t "${{ secrets.IONOS_CONTAINER_REGISTRY_HOSTNAME }}/microservices/email:${{ github.sha }}" --build-arg NuGetPackageSourceCredentials_TrainCloud="Username=${{ secrets.TRAINCLOUD_CHECKOUT_USER }};Password=${{ secrets.TRAINCLOUD_CHECKOUT_TOKEN }}" . 
+          docker build -t "${{ secrets.IONOS_CONTAINER_REGISTRY_HOSTNAME }}/microservices/email:${{ steps.get_tag.outputs.TAG }}" --build-arg NuGetPackageSourceCredentials_TrainCloud="Username=${{ secrets.TRAINCLOUD_CHECKOUT_USER }};Password=${{ secrets.TRAINCLOUD_CHECKOUT_TOKEN }}" . 
 
       - name: Push Docker image
         run: |
-          docker push "${{ secrets.IONOS_CONTAINER_REGISTRY_HOSTNAME }}/microservices/email:${{ github.sha }}"
+          docker push "${{ secrets.IONOS_CONTAINER_REGISTRY_HOSTNAME }}/microservices/email:${{ steps.get_tag.outputs.TAG }}"
         

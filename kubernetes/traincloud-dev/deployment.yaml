@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: email-deployment
+  namespace: traincloud-dev
+  labels:
+    app: email
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: email
+  template:
+    metadata:
+      labels:
+        app: email
+    spec:
+      serviceAccountName: storage-serviceaccount
+      automountServiceAccountToken: false
+      nodeSelector:
+        deployment_node: traincloud-net-microservices # Label in IONOS k8s node pool
+      containers:
+        - name: email
+          image: traincloud.cr.de-fra.ionos.com/microservices/gateway@sha256:b32859fe4ede354dd6f7fb654a64034c6d06621ece4c03ed14a135579e701123 
+          ports:
+            - containerPort: 8080
+          env:
+            - name: TRAINCLOUD_SERVICE_ENVIRONMENT
+              value: "traincloud-dev"
+      imagePullSecrets: 
+        - name: traincloud-container-registry-credentials

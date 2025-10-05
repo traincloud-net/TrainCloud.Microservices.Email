@@ -2,24 +2,13 @@ using FluentValidation;
 using TrainCloud.Microservices.Core.Extensions.Authentication;
 using TrainCloud.Microservices.Core.Extensions.Swagger;
 using TrainCloud.Microservices.Core.Filters.Exception;
-using TrainCloud.Microservices.Core.Middleware.LoadBalancing;
+using TrainCloud.Microservices.Core.Middleware.Localization;
 using TrainCloud.Microservices.Email.Models;
 using TrainCloud.Microservices.Email.Services.Email;
-using TrainCloud.Microservices.Email.Services.MessageBus;
 
+
+Environment.SetEnvironmentVariable("JWT_ISSUERSIGNINGKEY", Guid.Empty.ToString());
 var webApplicationBuilder = WebApplication.CreateBuilder(args);
-string environmentName = webApplicationBuilder.Environment.EnvironmentName;
-
-// Login as sa-email-local@traincloud.iam.gserviceaccount.com
-// Check out and sync the Credentials repository in your local TrainCloud folder
-// ./TrainCloud/Credentials/...
-// ./TrainCloud/TrainCloud.Microservices.Email/...
-if (environmentName == "Local")
-{
-    Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", "../../Credentials/serviceaccounts/sa-email-local.json");
-
-    Environment.SetEnvironmentVariable("JWT_ISSUERSIGNINGKEY", Guid.Empty.ToString());
-}
 
 webApplicationBuilder.Services.AddAuthorization();
 AuthenticationOptions authenticationOptions = webApplicationBuilder.Configuration.GetSection(AuthenticationOptions.Position).Get<AuthenticationOptions>()!;
@@ -38,18 +27,23 @@ webApplicationBuilder.Services.AddControllers(controllerOptions =>
     controllerOptions.Filters.Add<GlobalExceptionFilterAttribute>();
 });
 
-webApplicationBuilder.Services.AddHostedService<NewEmailMessageBusSubscriberService>(service =>
-    new NewEmailMessageBusSubscriberService(service.GetRequiredService<IConfiguration>(),
-                                            service.GetRequiredService<ILogger<NewEmailMessageBusSubscriberService>>(),
-                                            service.GetRequiredService<IServiceScopeFactory>(),
-                                            webApplicationBuilder.Configuration.GetValue<string>("MessageBus:Subscriptions:Email")!,
-                                            service.GetRequiredService<IEmailService>()));
+//webApplicationBuilder.Services.AddHostedService<NewEmailMessageBusSubscriber>(serviceProvider =>
+//    new NewEmailMessageBusSubscriber(serviceProvider.GetRequiredService<IConfiguration>(),
+//                                     serviceProvider.GetRequiredService<ILogger<NewEmailMessageBusSubscriber>>(),
+//                                     serviceProvider.GetRequiredService<IEmailService>()));
 
 webApplicationBuilder.Services.AddScoped<IValidator<PostSendEmailModel>, PostSendEmailModelValidator>();
 
 WebApplication webApplication = webApplicationBuilder.Build();
 
-webApplication.UseTrainCloudLoadBalancing();
+webApplication.Use(async (context, next) =>
+{
+    string trainCloudEnvironment = Environment.GetEnvironmentVariable("TRAINCLOUD_SERVICE_ENVIRONMENT") ?? "Development";
+    context.Response.Headers.Append("TrainCloud-Service-Environment", trainCloudEnvironment);
+    await next.Invoke();
+});
+
+webApplication.UseTrainCloudLocalization();
 webApplication.UseTrainCloudSwagger();
 webApplication.UseAuthorization();
 webApplication.MapControllers();

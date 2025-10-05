@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: email-service
+  namespace: traincloud-net
+  labels:
+    app: email
+spec:
+  type: ClusterIP  # or omit 'type' since ClusterIP is default
+  selector:
+    app: email
+  ports:
+    - protocol: TCP
+      targetPort: 8080 # Container-Port
+      port: 20203       # Cluster-intern
