@@ -49,7 +49,6 @@ public sealed class EmailController : AbstractController<EmailController>
     [Consumes("application/json")]
     [SwaggerResponse(StatusCodes.Status200OK)]
     [SwaggerResponse(StatusCodes.Status500InternalServerError)]
-    [ValidateModelFilter(typeof(IValidator<PostSendEmailModel>), typeof(PostSendEmailModel))]
     public async Task<IActionResult> SendTestAsync()
     {
         SendMailMessage msg = new()

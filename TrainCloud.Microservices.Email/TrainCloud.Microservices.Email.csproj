@@ -9,7 +9,7 @@
 
 		<ItemGroup>
 				<PackageReference Include="RabbitMQ.Client" Version="7.1.2" />
-				<PackageReference Include="KubernetesClient" Version="17.0.14" />
+				<!--<PackageReference Include="KubernetesClient" Version="17.0.14" />-->
 				<PackageReference Include="TrainCloud.Microservices.Core" Version="0.0.113" />
 		</ItemGroup>
 
