@@ -32,10 +32,11 @@ webApplicationBuilder.Services.AddControllers(controllerOptions =>
 });
 
 webApplicationBuilder.Services.AddScoped<MessageBusPublisher>();
-webApplicationBuilder.Services.AddHostedService<NewEmailMessageBusSubscriber>(serviceProvider =>
-    new NewEmailMessageBusSubscriber(serviceProvider.GetRequiredService<IConfiguration>(),
-                                     serviceProvider.GetRequiredService<ILogger<NewEmailMessageBusSubscriber>>(),
-                                     serviceProvider.GetRequiredService<IEmailService>()));
+webApplicationBuilder.Services.AddHostedService<EmailMessageBusSubscriber>(serviceProvider =>
+    new EmailMessageBusSubscriber(serviceProvider.GetRequiredService<IConfiguration>(),
+                                  serviceProvider.GetRequiredService<ILogger<EmailMessageBusSubscriber>>(),
+                                  "email",
+                                  serviceProvider.GetRequiredService<IEmailService>()));
 
 webApplicationBuilder.Services.AddScoped<IValidator<PostSendEmailModel>, PostSendEmailModelValidator>();
 

@@ -4,14 +4,15 @@ using TrainCloud.Microservices.Email.Services.Email;
 
 namespace TrainCloud.Microservices.Email.Services.MessageBus;
 
-public sealed class NewEmailMessageBusSubscriber : AbstractMessageBusSubscriber<SendMailMessage>
+public sealed class EmailMessageBusSubscriber : AbstractMessageBusSubscriber<SendMailMessage>
 {
     private IEmailService EmailService { get; init; }
 
-    public NewEmailMessageBusSubscriber(IConfiguration configuration, 
-                                        ILogger<NewEmailMessageBusSubscriber> logger,
-                                        IEmailService emailService) 
-        : base(configuration, logger)
+    public EmailMessageBusSubscriber(IConfiguration configuration, 
+                                     ILogger<EmailMessageBusSubscriber> logger,
+                                     string queueName,
+                                     IEmailService emailService) 
+        : base(configuration, logger, queueName)
     {
         EmailService = emailService;
     }

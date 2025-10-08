@@ -17,18 +17,14 @@ public sealed class EmailController : AbstractController<EmailController>
 {
     private IEmailService EmailService { get; init; }
 
-    private MessageBusPublisher Publisher { get; init; }
-
     public EmailController(IWebHostEnvironment webHostEnvironment,
                            IHttpContextAccessor httpContextAccessor,
                            IConfiguration configuration,
                            ILogger<EmailController> logger,
-                           IEmailService emailService,
-                           MessageBusPublisher publisher)
+                           IEmailService emailService)
         : base(webHostEnvironment, httpContextAccessor, configuration, logger)
     {
         EmailService = emailService;
-        Publisher = publisher;
     }
 
     [HttpPost("Send")]
@@ -41,25 +37,6 @@ public sealed class EmailController : AbstractController<EmailController>
     {
         string subject = $"ContactForm from {postModel.FromName} {postModel.FromEmail}: {postModel.Subject}";
         await EmailService.SendEmailAsync(new List<string>() { "nico@caratiola.net", "mail@sebastian-hoyer.online" }, null, null, subject, postModel.Body, false, null);
-        return Ok();
-    }
-
-    [HttpPost("SendTest")]
-    [AllowAnonymous]
-    [Consumes("application/json")]
-    [SwaggerResponse(StatusCodes.Status200OK)]
-    [SwaggerResponse(StatusCodes.Status500InternalServerError)]
-    public async Task<IActionResult> SendTestAsync()
-    {
-        SendMailMessage msg = new()
-        {
-            To = new() { "mail@sebastian-hoyer.online", "nico@caratiola.net" },
-            Subject = "Testmail aus dem Kubernetes Clustr",
-            Body = "Diese Mail wurde aus dem neuen Kubernetescluster per RabbitMQ versendet und ist ohne Unterschrift gültig. 🤡"
-        };
-
-        await Publisher.SendMessageAsync("email", msg);
-
         return Ok();
     }
 }

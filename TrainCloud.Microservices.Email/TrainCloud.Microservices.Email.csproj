@@ -8,8 +8,7 @@
 		</PropertyGroup>
 
 		<ItemGroup>
-				<PackageReference Include="RabbitMQ.Client" Version="7.1.2" />
-				<PackageReference Include="TrainCloud.Microservices.Core" Version="0.0.113" />
+				<PackageReference Include="TrainCloud.Microservices.Core" Version="0.0.115" />
 		</ItemGroup>
 
 		<ItemGroup>

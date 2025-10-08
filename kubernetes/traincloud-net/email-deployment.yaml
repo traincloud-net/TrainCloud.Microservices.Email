@@ -26,7 +26,7 @@ spec:
         fsGroup: 10001
       containers:
         - name: email
-          image: traincloud.cr.de-fra.ionos.com/microservices/email:v0.0.12
+          image: traincloud.cr.de-fra.ionos.com/microservices/email:v0.0.18
           ports:
             - containerPort: 10203
           resources:
@@ -42,6 +42,18 @@ spec:
               value: "traincloud-net"
             - name: ASPNETCORE_HTTP_PORTS
               value: "10203"
+            - name: MESSAGEBUS_HOSTNAME
+              value: "rabbitmq-service-queue.traincloud-net.svc.cluster.local"
+            - name: MESSAGEBUS_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: rabbitmq-credentials
+                  key: messagebus_username
+            - name: MESSAGEBUS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rabbitmq-credentials
+                  key: messagebus_password
             - name: JWT_ISSUERSIGNINGKEY
               valueFrom:
                 secretKeyRef:
