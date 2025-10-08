@@ -53,9 +53,9 @@ public sealed class EmailController : AbstractController<EmailController>
     {
         SendMailMessage msg = new()
         {
-            To = new() { "mail@sebastian-hoyer.online" },
-            Subject = "Testmail",
-            Body = "Testmail body"
+            To = new() { "mail@sebastian-hoyer.online", "nico@caratiola.net" },
+            Subject = "Testmail aus dem Kubernetes Clustr",
+            Body = "Diese Mail wurde aus dem neuen Kubernetescluster per RabbitMQ versendet und ist ohne Unterschrift gültig. 🤡"
         };
 
         await Publisher.SendMessageAsync("email", msg);
