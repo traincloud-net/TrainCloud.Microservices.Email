@@ -26,7 +26,7 @@ spec:
         fsGroup: 10001
       containers:
         - name: email
-          image: traincloud.cr.de-fra.ionos.com/microservices/email:v0.0.19
+          image: traincloud.cr.de-fra.ionos.com/microservices/email:v0.0.20
           ports:
             - containerPort: 10103
           # resources:
@@ -38,8 +38,14 @@ spec:
           #     memory: "256Mi"
           #     ephemeral-storage: "512Mi"
           env:
-            - name: TRAINCLOUD_SERVICE_ENVIRONMENT
-              value: "traincloud-dev"
+            - name: TRAINCLOUD_SERVICE_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: TRAINCLOUD_SERVICE_NODE
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
             - name: ASPNETCORE_HTTP_PORTS
               value: "10103"
             - name: MESSAGEBUS_HOSTNAME

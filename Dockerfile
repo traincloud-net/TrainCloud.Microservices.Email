@@ -1,5 +1,6 @@
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build-env
 WORKDIR /App
+ARG TRAINCLOUD_SERVICE_VERSION=unknown
 ARG NuGetPackageSourceCredentials_TrainCloud
 
 # Copy solution 
@@ -19,6 +20,9 @@ RUN dotnet publish TrainCloud.Microservices.Email/TrainCloud.Microservices.Email
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:9.0
+ARG TRAINCLOUD_SERVICE_VERSION=unknown
+ENV TRAINCLOUD_SERVICE_VERSION=$TRAINCLOUD_SERVICE_VERSION
+
 WORKDIR /App
 
 COPY --from=build-env /App/out .

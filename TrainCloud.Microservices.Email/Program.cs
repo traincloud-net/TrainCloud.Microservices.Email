@@ -49,6 +49,21 @@ webApplication.Use(async (context, next) =>
     await next.Invoke();
 });
 
+webApplication.Use(async (context, next) =>
+{
+    string k8sNamespace = Environment.GetEnvironmentVariable("TRAINCLOUD_SERVICE_NAMESPACE") ?? "Development";
+    context.Response.Headers.Append("traincloud-service-namespace", k8sNamespace);
+
+    string k8sNode = Environment.GetEnvironmentVariable("TRAINCLOUD_SERVICE_NODE") ?? "Development";
+    string k8sNodeShort = k8sNode.Substring(k8sNode.Length - 10);
+    context.Response.Headers.Append("traincloud-service-node", k8sNodeShort);
+
+    string serviceVersion = Environment.GetEnvironmentVariable("TRAINCLOUD_SERVICE_VERSION") ?? "Development";
+    context.Response.Headers.Append("traincloud-service-version", serviceVersion);
+
+    await next.Invoke();
+});
+
 webApplication.UseTrainCloudLocalization();
 webApplication.UseTrainCloudSwagger();
 webApplication.UseAuthorization();
