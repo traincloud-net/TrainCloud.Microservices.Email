@@ -44,13 +44,6 @@ WebApplication webApplication = webApplicationBuilder.Build();
 
 webApplication.Use(async (context, next) =>
 {
-    string trainCloudEnvironment = Environment.GetEnvironmentVariable("TRAINCLOUD_SERVICE_ENVIRONMENT") ?? "Development";
-    context.Response.Headers.Append("TrainCloud-Service-Environment", trainCloudEnvironment);
-    await next.Invoke();
-});
-
-webApplication.Use(async (context, next) =>
-{
     string k8sNamespace = Environment.GetEnvironmentVariable("TRAINCLOUD_SERVICE_NAMESPACE") ?? "Development";
     context.Response.Headers.Append("traincloud-service-namespace", k8sNamespace);
 
