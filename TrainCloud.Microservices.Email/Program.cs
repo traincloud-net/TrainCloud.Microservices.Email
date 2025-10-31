@@ -14,7 +14,7 @@ var webApplicationBuilder = WebApplication.CreateBuilder(args);
 if (!webApplicationBuilder.Environment.IsProduction())
 {
     Environment.SetEnvironmentVariable("JWT_ISSUERSIGNINGKEY", Guid.Empty.ToString());
-    webApplicationBuilder.WebHost.ConfigureTrainCloudKestrel(7098, true);
+    webApplicationBuilder.WebHost.ConfigureTrainCloudKestrel(7098, true, false, false);
 }
 else
 {
@@ -22,7 +22,7 @@ else
     string microserviceTlsEnabled = Environment.GetEnvironmentVariable("TRAINCLOUD_MICROSERVICE_TLS_ENABLED")!;
     int port = int.Parse(microservicePort);
     bool tlsEnabled = bool.Parse(microserviceTlsEnabled);
-    webApplicationBuilder.WebHost.ConfigureTrainCloudKestrel(port, tlsEnabled);
+    webApplicationBuilder.WebHost.ConfigureTrainCloudKestrel(port, tlsEnabled, true, true);
 }
 
 webApplicationBuilder.Services.AddAuthorization();
