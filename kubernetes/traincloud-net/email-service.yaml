@@ -11,5 +11,14 @@ spec:
     app: email
   ports:
     - protocol: TCP
-      targetPort: 10203 # Container-Port
-      port: 20203       # Cluster-intern
+      name: email
+      targetPort: 8081  # Container-Port
+      port: 8081        # Cluster-intern
+    - protocol: TCP
+      name: health
+      targetPort: 8080
+      port: 8080       
+    - protocol: TCP
+      name: metrics
+      targetPort: 9090
+      port: 9090   

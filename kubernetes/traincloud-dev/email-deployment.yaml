@@ -14,6 +14,11 @@ spec:
     metadata:
       labels:
         app: email
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/metrics"
+        prometheus.io/scheme: "http"
     spec:
       serviceAccountName: email-serviceaccount
       automountServiceAccountToken: false
@@ -28,7 +33,16 @@ spec:
         - name: email
           image: traincloud.cr.de-fra.ionos.com/microservices/email:v0.0.20
           ports:
-            - containerPort: 10103
+            - containerPort: 8081
+              protocol: TCP
+              name: email
+            - containerPort: 8080
+              protocol: TCP
+              name: health
+            - containerPort: 9090
+              protocol: TCP
+              name: metrics
+
           # resources:
           #   requests:
           #     cpu: "100m"
@@ -37,6 +51,49 @@ spec:
           #   limits:
           #     memory: "256Mi"
           #     ephemeral-storage: "512Mi"
+
+
+          # Liveness probe - checks if container is alive
+          # Kubernetes will restart the container if this fails
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
+          
+          # Readiness probe - checks if container is ready to serve traffic
+          # Kubernetes will remove pod from service endpoints if this fails
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 3
+            successThreshold: 1
+            failureThreshold: 3
+          
+          # Startup probe - for slow-starting containers
+          # Disables liveness/readiness checks until this succeeds
+          startupProbe:
+            httpGet:
+              path: /health
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 0
+            periodSeconds: 5
+            timeoutSeconds: 3
+            successThreshold: 1
+            failureThreshold: 30  # 30 * 5s = 150s max startup time
+          
+
+
           env:
             - name: TRAINCLOUD_SERVICE_NAMESPACE
               valueFrom:
@@ -46,8 +103,10 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: spec.nodeName
-            - name: ASPNETCORE_HTTP_PORTS
-              value: "10103"
+            - name: TRAINCLOUD_MICROSERVICE_PORT
+              value: "8081"
+            - name: TRAINCLOUD_MICROSERVICE_TLS_ENABLED
+              value: "false"
             - name: MESSAGEBUS_HOSTNAME
               value: "rabbitmq-service-queue.traincloud-dev.svc.cluster.local"
             - name: MESSAGEBUS_USERNAME

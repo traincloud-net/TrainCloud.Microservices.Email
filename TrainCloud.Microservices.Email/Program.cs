@@ -1,5 +1,7 @@
 using FluentValidation;
+using Prometheus;
 using TrainCloud.Microservices.Core.Extensions.Authentication;
+using TrainCloud.Microservices.Core.Extensions.Kestrel;
 using TrainCloud.Microservices.Core.Extensions.Swagger;
 using TrainCloud.Microservices.Core.Filters.Exception;
 using TrainCloud.Microservices.Core.Middleware.Localization;
@@ -12,12 +14,22 @@ var webApplicationBuilder = WebApplication.CreateBuilder(args);
 if (!webApplicationBuilder.Environment.IsProduction())
 {
     Environment.SetEnvironmentVariable("JWT_ISSUERSIGNINGKEY", Guid.Empty.ToString());
+    webApplicationBuilder.WebHost.ConfigureTrainCloudKestrel(7098, true);
+}
+else
+{
+    string microservicePort = Environment.GetEnvironmentVariable("TRAINCLOUD_MICROSERVICE_PORT")!;
+    string microserviceTlsEnabled = Environment.GetEnvironmentVariable("TRAINCLOUD_MICROSERVICE_TLS_ENABLED")!;
+    int port = int.Parse(microservicePort);
+    bool tlsEnabled = bool.Parse(microserviceTlsEnabled);
+    webApplicationBuilder.WebHost.ConfigureTrainCloudKestrel(port, tlsEnabled);
 }
 
 webApplicationBuilder.Services.AddAuthorization();
 AuthenticationOptions authenticationOptions = webApplicationBuilder.Configuration.GetSection(AuthenticationOptions.Position).Get<AuthenticationOptions>()!;
 webApplicationBuilder.Services.AddTrainCloudAuthentication(authenticationOptions);
 
+webApplicationBuilder.Services.AddHealthChecks();
 webApplicationBuilder.Services.AddHttpContextAccessor();
 
 webApplicationBuilder.Services.AddLocalization();
@@ -42,7 +54,19 @@ webApplicationBuilder.Services.AddScoped<IValidator<PostSendEmailModel>, PostSen
 
 WebApplication webApplication = webApplicationBuilder.Build();
 
-webApplication.Use(async (context, next) =>
+if (webApplication.Environment.IsProduction())
+{
+    // Prometheus 
+    webApplication.UseHttpMetrics();
+    webApplication.MapMetrics()
+                  .RequireHost("*:9090");
+
+    // k8s health checks
+    webApplication.MapHealthChecks("/health")
+                  .RequireHost("*:8080");
+}
+
+webApplication.Use((context, next) =>
 {
     string k8sNamespace = Environment.GetEnvironmentVariable("TRAINCLOUD_SERVICE_NAMESPACE") ?? "Development";
     context.Response.Headers.Append("traincloud-service-namespace", k8sNamespace);
@@ -54,7 +78,7 @@ webApplication.Use(async (context, next) =>
     string serviceVersion = Environment.GetEnvironmentVariable("TRAINCLOUD_SERVICE_VERSION") ?? "Development";
     context.Response.Headers.Append("traincloud-service-version", serviceVersion);
 
-    await next.Invoke();
+    return next.Invoke();
 });
 
 webApplication.UseTrainCloudLocalization();
