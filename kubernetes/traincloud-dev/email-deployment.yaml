@@ -23,7 +23,7 @@ spec:
       serviceAccountName: email-serviceaccount
       automountServiceAccountToken: false
       nodeSelector:
-        deployment_node: traincloud-dev-microservices # Label in IONOS k8s node pool
+        deployment_node: traincloud-dev # Label in IONOS k8s node pool
       securityContext:
         runAsNonRoot: true
         runAsUser: 10001
