@@ -5,6 +5,10 @@ metadata:
   namespace: traincloud-dev
   labels:
     app: email
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9090"
+    prometheus.io/path: "/metrics"
 spec:
   type: ClusterIP  # or omit 'type' since ClusterIP is default
   selector:
